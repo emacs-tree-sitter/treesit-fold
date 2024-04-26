@@ -3,7 +3,7 @@
 
 # treesit-fold
 
-> Code-folding using tree-sitter
+> Code-folding using treesit
 
 [![CI](https://github.com/emacs-tree-sitter/treesit-fold/actions/workflows/test.yml/badge.svg)](https://github.com/emacs-tree-sitter/treesit-fold/actions/workflows/test.yml)
 
