@@ -1,13 +1,13 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![JCS-ELPA](https://raw.githubusercontent.com/jcs-emacs/badges/master/elpa/v/ts-fold.svg)](https://jcs-emacs.github.io/jcs-elpa/#/ts-fold)
+[![JCS-ELPA](https://raw.githubusercontent.com/jcs-emacs/badges/master/elpa/v/treesit-fold.svg)](https://jcs-emacs.github.io/jcs-elpa/#/treesit-fold)
 
-# ts-fold
+# treesit-fold
 
 > Code-folding using tree-sitter
 
-[![CI](https://github.com/emacs-tree-sitter/ts-fold/actions/workflows/test.yml/badge.svg)](https://github.com/emacs-tree-sitter/ts-fold/actions/workflows/test.yml)
+[![CI](https://github.com/emacs-tree-sitter/treesit-fold/actions/workflows/test.yml/badge.svg)](https://github.com/emacs-tree-sitter/treesit-fold/actions/workflows/test.yml)
 
-`ts-fold` builds on top of [elisp-tree-sitter](https://github.com/emacs-tree-sitter/elisp-tree-sitter)
+`treesit-fold` builds on top of [elisp-tree-sitter](https://github.com/emacs-tree-sitter/elisp-tree-sitter)
 to provide code folding based on the tree-sitter syntax tree.
 
 <p align="center">
@@ -54,27 +54,27 @@ to provide code folding based on the tree-sitter syntax tree.
 ### 🔍 Method 1. with `straight.el` and `use-package`:
 
 ```elisp
-(use-package ts-fold
-  :straight (ts-fold :type git :host github :repo "emacs-tree-sitter/ts-fold"))
+(use-package treesit-fold
+  :straight (treesit-fold :type git :host github :repo "emacs-tree-sitter/treesit-fold"))
 ```
 
 ### 🔍 Method 2. Manual
 
 ```sh
-git clone https://github.com/emacs-tree-sitter/ts-fold /path/to/lib
+git clone https://github.com/emacs-tree-sitter/treesit-fold /path/to/lib
 ```
 
 then in Emacs:
 
 ```elisp
 (add-to-list 'load-path "/path/to/lib")
-(require 'ts-fold)
+(require treesit-fold)
 ```
 
 or
 
 ```elisp
-(use-package ts-fold
+(use-package treesit-fold
   :load-path "/path/to/lib")
 ```
 
@@ -82,28 +82,28 @@ or
 
 ### 📇 Commands
 
-The following are the functions provided by `ts-fold-mode`
+The following are the functions provided by `treesit-fold-mode`
 
-Commands for enabling `ts-fold`:
+Commands for enabling `treesit-fold`:
 
-| Commands                         | Description                                                                                         |
-|----------------------------------|-----------------------------------------------------------------------------------------------------|
-| `ts-fold-mode`                   | enable `ts-fold-mode` in the current buffer.                                                        |
-| `global-ts-fold-mode`            | enable `ts-fold-mode` whenever tree-sitter is turned on and the major mode is supported by ts-fold. |
-| `ts-fold-indicators-mode`        | enable ts-fold with indicators in the current buffer. See [plugins section](#-indicators-mode).     |
-| `global-ts-fold-indicators-mode` | enable ts-fold with indicators globally. See [plugins section](#-indicators-mode).                  |
-| `ts-fold-line-comment-mode`      | enable line comment folding.                                                                        |
+| Commands                              | Description                                                                                                   |
+|---------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| `treesit-fold-mode`                   | enable `treesit-fold-mode` in the current buffer.                                                             |
+| `global-treesit-fold-mode`            | enable `treesit-fold-mode` whenever tree-sitter is turned on and the major mode is supported by treesit-fold. |
+| `treesit-fold-indicators-mode`        | enable `treesit-fold` with indicators in the current buffer. See [plugins section](#-indicators-mode).        |
+| `global-treesit-fold-indicators-mode` | enable `treesit-fold` with indicators globally. See [plugins section](#-indicators-mode).                     |
+| `treesit-fold-line-comment-mode`      | enable line comment folding.                                                                                  |
 
-Commands for using `ts-fold`.
+Commands for using `treesit-fold`.
 
-| Commands                   | Description                                                                   |
-| -------------------------- | ----------------------------------------------------------------------------- |
-| `ts-fold-close`            | fold the current syntax node.                                                 |
-| `ts-fold-open`             | open the outermost fold of the current syntax node. Keep the sub-folds close. |
-| `ts-fold-open-recursively` | open all folds inside the current syntax node.                                |
-| `ts-fold-close-all`        | close all foldable syntax nodes in the current buffer.                        |
-| `ts-fold-open-all`         | open all folded syntax nodes in the current buffer.                           |
-| `ts-fold-toggle`           | toggle the syntax node at `point'.                                            |
+| Commands                        | Description                                                                   |
+|---------------------------------|-------------------------------------------------------------------------------|
+| `treesit-fold-close`            | fold the current syntax node.                                                 |
+| `treesit-fold-open`             | open the outermost fold of the current syntax node. Keep the sub-folds close. |
+| `treesit-fold-open-recursively` | open all folds inside the current syntax node.                                |
+| `treesit-fold-close-all`        | close all foldable syntax nodes in the current buffer.                        |
+| `treesit-fold-open-all`         | open all folded syntax nodes in the current buffer.                           |
+| `treesit-fold-toggle`           | toggle the syntax node at `point'.                                            |
 
 If evil mode is loaded, then these commands are also added to the evil folding list.
 
@@ -146,25 +146,25 @@ These languages are in development:
 - Smithy
 
 *P.S. We don't list trivial languages here. e.g., LLVM IR (`.ll`) files, etc.
-Please see the variable `ts-fold-range-alist` for the fully supported list!*
+Please see the variable `treesit-fold-range-alist` for the fully supported list!*
 
 ## 📝 Customization
 
-Although ts-fold aims to have good folding out of the box for all supported
+Although treesit-fold aims to have good folding out of the box for all supported
 definitions, people will indubitably have their own preferences or desired
 functionality. The following section outlines how to add your own folding
-definitions and folding functions to make ts-fold work for you. If there are any
+definitions and folding functions to make treesit-fold work for you. If there are any
 improvements you find for existing or new languages, please do raise a PR so
 that others may benefit from better folding in the future!
 
 ### ⚪ Folding on new nodes
 
-Ts-fold defines all its folding definitions in the variable
-`ts-fold-range-alist` which is an alist with the key of the alist being the
+Treesit-fold defines all its folding definitions in the variable
+`treesit-fold-range-alist` which is an alist with the key of the alist being the
 mode and the value being another alist of fold definitions.
 
 ```elisp
-;; Example of ts-fold-range-alist's structure
+;; Example of treesit-fold-range-alist's structure
 '((c-mode     . c-folding-definitions) ;; <language>-folding-definitions is structured as shown below
   (css-mode   . css-folding-definitions)
   (go-mode    . go-folding-definitions)
@@ -173,8 +173,8 @@ mode and the value being another alist of fold definitions.
 
 ;; Examle of a folding definition alist
 (setq css-folding-definitions
-    (block   . ts-fold-range-seq)
-    (comment . ts-fold-range-c-like-comment))
+    (block   . treesit-fold-range-seq)
+    (comment . treesit-fold-range-c-like-comment))
 ```
 
 So you can select whatever node that you want to fold on it.
@@ -184,9 +184,9 @@ To find what node you'll want to fold closed, refer to the
 about viewing nodes. `tree-sitter-debug` and `tree-sitter-query-builder`
 are both very useful for this.
 
-For the folding functions, ts-fold provides some default
+For the folding functions, treesit-fold provides some default
 
-- `ts-fold-range-seq` - Folds from the start of the node to the end of the node
+- `treesit-fold-range-seq` - Folds from the start of the node to the end of the node
   leaving a buffer of one character on each side. Usually used for code blocks
   that have bracketing delimiters.
 
@@ -197,13 +197,13 @@ For the folding functions, ts-fold provides some default
   } // <-- end of tree-sitter block node
 
   // |
-  // | '(block . ts-fold-range-seq)
+  // | '(block . treesit-fold-range-seq)
   // V
 
   int main() {...} // Folded node
   ```
 
-- `ts-fold-range-markers` - Folds the node starting from a giving delimiter
+- `treesit-fold-range-markers` - Folds the node starting from a giving delimiter
   character. Useful if tree-sitter's node definition doesn't align with the
   start of the desired folding section.
 
@@ -220,14 +220,14 @@ type Dog interface {
 
 /* | Note: The tree-sitter node starts at the word interface, not at the '{'.
  * | '(interface_type . (lambda (node offset)
- * |                      (ts-fold-range-markers node offset "{" "}")))
+ * |                      (treesit-fold-range-markers node offset "{" "}")))
  * V
  */
 
 type Dog interface {...}
 ```
 
-- `ts-fold-range-block-comment` - Folds multi-line comments that are of the form
+- `treesit-fold-range-block-comment` - Folds multi-line comments that are of the form
   `/*...*/`. Should show a summary if the commentary plugin is turned on.
 
   ```c++
@@ -241,7 +241,7 @@ type Dog interface {...}
   }
 
   // |
-  // | '(comment . ts-fold-range-block-comment)
+  // | '(comment . treesit-fold-range-block-comment)
   // V
 
   /* <S> The main function that gets run after program is compiled */
@@ -250,7 +250,7 @@ type Dog interface {...}
       return 0;
   ```
 
-- `ts-fold-range-line-comment` - For languages that have one line comment blocks
+- `treesit-fold-range-line-comment` - For languages that have one line comment blocks
   with the comment delimiter starting each line. Condenses all the comment nodes
   into a single fold.
 
@@ -265,14 +265,14 @@ type Dog interface {...}
   alias ll='ls -lah'
 
   # |
-  # | (comment (lambda (node offset) (ts-fold-range-line-comment node offset "#"))))
+  # | (comment (lambda (node offset) (treesit-fold-range-line-comment node offset "#"))))
   # V
 
   # show the long form of ls...
   alias ll='ls -lah'
   ```
 
-- `ts-fold-range-c-like-comment` - A shortcut for the large number of languages
+- `treesit-fold-range-c-like-comment` - A shortcut for the large number of languages
   that have the c style comment structures `/*...*/` and `// ...`. Smartly picks
   the correct folding style for the comment on the line.
 
@@ -289,7 +289,7 @@ type Dog interface {...}
   }
 
   // |
-  // | '(comment . ts-fold-range-c-like-comment)
+  // | '(comment . treesit-fold-range-c-like-comment)
   // V
 
   /* <S> The main function that gets run after program is compiled */
@@ -299,22 +299,22 @@ type Dog interface {...}
       return 0;
   ```
 
-Now that you know what kinds of folds are easily available in ts-fold, you can
-go ahead and add new fold definitions to `ts-fold-range-alist` and be good to go!
+Now that you know what kinds of folds are easily available in treesit-fold, you can
+go ahead and add new fold definitions to `treesit-fold-range-alist` and be good to go!
 
 #### ❔ Example
 
 Let's look at a quick example of adding a new folding definition. Let's say you
 want to add folding to `go-mode`'s `field_declaration_list`. The folding
 definition that is needed will be
-`'(field_declaration_list . ts-fold-range-seq)`. To add this to the
-`ts-fold-range-alist`, you can do something like the following.
+`'(field_declaration_list . treesit-fold-range-seq)`. To add this to the
+`treesit-fold-range-alist`, you can do something like the following.
 
 ```emacs-lisp
-(push '(field_declaration_list . ts-fold-range-seq) (alist-get 'go-mode ts-fold-range-alist))
+(push '(field_declaration_list . treesit-fold-range-seq) (alist-get 'go-mode treesit-fold-range-alist))
 ```
 
-Now the new fold definition should be usable by ts-fold!
+Now the new fold definition should be usable by treesit-fold!
 
 #### ↔ Offset
 
@@ -326,13 +326,13 @@ come in. When adding a fold definition to a a language's fold alist, you can
 either provide the folding function directly as you've seen so far:
 
 ```elisp
-'(block . ts-fold-range-seq)
+'(block . treesit-fold-range-seq)
 ```
 
 Or you can provide the folding function with an offset:
 
 ```elisp
-'(block . (ts-fold-range-seq 1 -3))
+'(block . (treesit-fold-range-seq 1 -3))
 ```
 
 When a range is provided, it provides extra room on the ends of a fold. The way
@@ -354,7 +354,7 @@ do...done
 ```
 
 The `do...done` block is represented in tree-sitter as the node named
-`do_group`. However, if we just use `'(do_group . ts-fold-range-seq)`, then
+`do_group`. However, if we just use `'(do_group . treesit-fold-range-seq)`, then
 we'll get results like the following:
 
 ```emacs-lisp
@@ -363,7 +363,7 @@ d...e
 ```
 
 which is hard to read. Instead, we can use the definition
-`'(do_group . (ts-fold-range-seq 1 -3))` to offset the fold a bit to get our
+`'(do_group . (treesit-fold-range-seq 1 -3))` to offset the fold a bit to get our
 desired result!
 
 ### 🔍 Writing new fold functions
@@ -382,19 +382,19 @@ then no fold is created. This can be useful if you want to add extra conditional
 logic onto your fold.
 
 As an example of a folding function, take a look at the definition of the
-basic `ts-fold-range-seq`.
+basic `treesit-fold-range-seq`.
 
 ```elisp
-(defun ts-fold-range-seq (node offset)
+(defun treesit-fold-range-seq (node offset)
   "..."
   (let ((beg (1+ (tsc-node-start-position node)))  ; node beginning position
         (end (1- (tsc-node-end-position node))))   ; node end position
-    (ts-fold--cons-add (cons beg end) offset)))    ; return fold range
+    (treesit-fold--cons-add (cons beg end) offset)))    ; return fold range
 ```
 
 ## 🔌 Plugins
 
-ts-fold comes with a couple of useful little additions that can be used or
+treesit-fold comes with a couple of useful little additions that can be used or
 turned off as desired.
 
 ### ⚖ Indicators Mode
@@ -408,26 +408,26 @@ can be made. They can be clicked on to fold or unfold given nodes.
 
 #### 💾 Installation
 
-`ts-fold-indicator-mode` is loaded when `ts-fold-mode` is and the functionality
+`treesit-fold-indicator-mode` is loaded when `treesit-fold-mode` is and the functionality
 should be auto-loaded in, however if that's not working then you may want to
 explicitly declare the package in in your config.
 
 - `use-package`
 
   ```elisp
-  (use-package ts-fold-indicators
-  :straight (ts-fold-indicators :type git :host github :repo "emacs-tree-sitter/ts-fold"))
+  (use-package treesit-fold-indicators
+  :straight (treesit-fold-indicators :type git :host github :repo "emacs-tree-sitter/treesit-fold"))
   ```
 
 - ```elisp
   (add-to-list 'load-path "/path/to/lib")
-  (require ts-fold)
+  (require treesit-fold)
   ```
 
   or
 
   ```elisp
-  (use-package ts-fold-indicators
+  (use-package treesit-fold-indicators
      :load-path "/path/to/lib")
   ```
 
@@ -436,37 +436,37 @@ explicitly declare the package in in your config.
 You can then enable this manually by doing either of the following:
 
 ```
-M-x ts-fold-indicators-mode
+M-x treesit-fold-indicators-mode
 
-M-x global-ts-fold-indicators-mode
+M-x global-treesit-fold-indicators-mode
 ```
 
-Please note that turning on `ts-fold-indicators-mode` automatically turns on
-`ts-fold-mode` as well. Though, turning off `ts-fold-indicators-mode` does not
-turn off `ts-fold-mode`
+Please note that turning on `treesit-fold-indicators-mode` automatically turns on
+`treesit-fold-mode` as well. Though, turning off `treesit-fold-indicators-mode` does not
+turn off `treesit-fold-mode`
 
 - To enable this automatically whenever `tree-sitter-mode` is enabled, use the global indicator mode:
 
   ```elisp
-  (global-ts-fold-indicators-mode 1)
+  (global-treesit-fold-indicators-mode 1)
   ```
 
   Else, a hook can be added to tree-sitter directly.
 
   ```elisp
-  (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
+  (add-hook 'tree-sitter-after-on-hook #'treesit-fold-indicators-mode)
   ```
 
 - To switch to left/right fringe: (Default is `left-fringe`)
 
   ```elisp
-  (setq ts-fold-indicators-fringe 'right-fringe)
+  (setq treesit-fold-indicators-fringe 'right-fringe)
   ```
 
 - To lower/higher the fringe overlay's priority: (Default is `30`)
 
   ```elisp
-  (setq ts-fold-indicators-priority 30)
+  (setq treesit-fold-indicators-priority 30)
   ```
 
 - To apply different faces depending on some conditions: (Default is `nil`)
@@ -476,19 +476,19 @@ turn off `ts-fold-mode`
 
   ```elisp
 
-  (setq ts-fold-indicators-face-function
+  (setq treesit-fold-indicators-face-function
         (lambda (pos &rest _)
           ;; Return the face of it's function.
           (line-reminder--get-face (line-number-at-pos pos t))))
 
   (setq line-reminder-add-line-function
         (lambda (&rest _)
-          (null (ts-fold--overlays-in 'ts-fold-indicators-window (selected-window)
+          (null (treesit-fold--overlays-in treesit-fold-indicators-window (selected-window)
                                       (line-beginning-position) (line-end-position)))))
 
   (advice-add 'line-reminder-transfer-to-saved-lines :after
-              ;; Refresh indicators for package `ts-fold'.
-              #'ts-fold-indicators-refresh)
+              ;; Refresh indicators for package `treesit-fold'.
+              #'treesit-fold-indicators-refresh)
   ```
 
 ### 📝 Summary
@@ -505,45 +505,45 @@ so you can have a nice way to peek at what's inside the fold range.
 - If you don't want this to happen, do: (Default is `t`)
 
   ```elisp
-  (setq ts-fold-summary-show nil)
+  (setq treesit-fold-summary-show nil)
   ```
 
 - Summary are truncated by length: (Default is `60`)
 
   ```elisp
-  (setq ts-fold-summary-max-length 60)
+  (setq treesit-fold-summary-max-length 60)
   ```
 
 - The exceeding string are replace by: (Default is `"..."`)
 
   ```elisp
-  (setq ts-fold-summary-exceeded-string "...")
+  (setq treesit-fold-summary-exceeded-string "...")
   ```
 
 - To change summary format: (Default is `" <S> %s "`)
 
   ```elisp
-  (setq ts-fold-summary-format " <S> %s ")
+  (setq treesit-fold-summary-format " <S> %s ")
   ```
 
 #### 📝 Customization
 
 Just like with fold definitions, you can create your own summary definitions.
-Summary definitions are defined in `ts-fold-summary-parsers-alist` and has one
+Summary definitions are defined in `treesit-fold-summary-parsers-alist` and has one
 summary function per major mode `'(java-mode . fold-summary-function)`. The
 summary function takes in the doc string which is all the text from a doc node
 and then returns a string to be displayed in its stead. Unlike with the folding
 functions, there aren't a set of general summary functions to fall back on.
 However, there are lots of examples and helper functions present in
-`ts-fold-summary.el`. Let's look at one example here.
+`treesit-fold-summary.el`. Let's look at one example here.
 
 ```emacs-lisp
-(defun ts-fold-summary-javadoc (doc-str)
+(defun treesit-fold-summary-javadoc (doc-str)
   "Extract summary from DOC-STR in Javadoc."
-  (ts-fold-summary--generic doc-str "*")) ;; strip the '*' and returns the first line
+  (treesit-fold-summary--generic doc-str "*")) ;; strip the '*' and returns the first line
 ```
 
-As can be seen `ts-fold-summary--generic` is a very helpful function since it
+As can be seen `treesit-fold-summary--generic` is a very helpful function since it
 removes the provided delimiter and returns the first line. often this will be
 enough.
 
@@ -558,7 +558,7 @@ This plugin makes line comment into foldable range.
 #### 🖥 Usage
 
   ```
-  M-x ts-fold-line-comment-mode
+  M-x treesit-fold-line-comment-mode
   ```
 
 ## 🔰 Contribute
@@ -618,14 +618,14 @@ $ eask lint package
 ### ❓ How to add a folding parser?
 
 When adding a new folding parser, add the folding definition function to
-`ts-fold.el` itself near where the other range functions live and then add the
-parser to `ts-fold-parsers.el` file. Finally, if you are adding support for a
-new language, remember to add it to the `ts-fold-range-alist` variable.
+`treesit-fold.el` itself near where the other range functions live and then add the
+parser to `treesit-fold-parsers.el` file. Finally, if you are adding support for a
+new language, remember to add it to the `treesit-fold-range-alist` variable.
 
-When creating a new parser, name it `ts-fold-parsers-<language>`.
+When creating a new parser, name it `treesit-fold-parsers-<language>`.
 
 When creating a new folding function, name it
-`ts-fold-range-<language>-<feature>` or something similar.
+`treesit-fold-range-<language>-<feature>` or something similar.
 
 #### 🔍 Where can I look for tree-sitter node?
 
@@ -650,17 +650,17 @@ To look for the correct node you have three options:
 
 ### ❓ How to create a summary parser?
 
-`ts-fold-summary.el` module is used to extract and display a short description
+`treesit-fold-summary.el` module is used to extract and display a short description
 from the comment/docstring.
 
 To create a summary parser, you just have to create a function that could
 extract comment syntax correctly then register this function to
-`ts-fold-summary-parsers-alist` defined in `ts-fold-summary.el`.
+`treesit-fold-summary-parsers-alist` defined in `treesit-fold-summary.el`.
 The display and shortening will be handled by the module itself.
 
-Functions should be named with the prefix `ts-fold-summary-` followed by
+Functions should be named with the prefix `treesit-fold-summary-` followed by
 `style name`. For example, to create a summary parser for Javadoc style, then it
-should be named `ts-fold-summary-javadoc`.
+should be named `treesit-fold-summary-javadoc`.
 
 ## ⚜️ License
 

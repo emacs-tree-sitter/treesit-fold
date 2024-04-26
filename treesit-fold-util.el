@@ -1,4 +1,4 @@
-;;; ts-fold-util.el --- Utility module  -*- lexical-binding: t; -*-
+;;; treesit-fold-util.el --- Utility module  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2024  Shen, Jen-Chieh
 ;; Created date 2021-10-04 20:19:42
@@ -29,7 +29,7 @@
 ;; (@* "Redisplay" )
 ;;
 
-(defmacro ts-fold--with-no-redisplay (&rest body)
+(defmacro treesit-fold--with-no-redisplay (&rest body)
   "Execute BODY without any redisplay execution."
   (declare (indent 0) (debug t))
   `(let ((inhibit-redisplay t)
@@ -48,11 +48,11 @@
 ;; (@* "String" )
 ;;
 
-(defun ts-fold-2str (obj)
+(defun treesit-fold-2str (obj)
   "Convert OBJ to string."
   (format "%s" obj))
 
-(defun ts-fold--count-matches (pattern str)
+(defun treesit-fold--count-matches (pattern str)
   "Count occurrences of PATTERN in STR.
 
 Like function `s-count-matches' but faster."
@@ -62,7 +62,7 @@ Like function `s-count-matches' but faster."
 ;; (@* "Cons" )
 ;;
 
-(defun ts-fold--cons-add (c1 c2)
+(defun treesit-fold--cons-add (c1 c2)
   "Addition for two cons C1 and C2."
   (cons (+ (car c1) (car c2)) (+ (cdr c1) (cdr c2))))
 
@@ -70,7 +70,7 @@ Like function `s-count-matches' but faster."
 ;; (@* "Overlay" )
 ;;
 
-(defun ts-fold--overlays-in (prop name &optional beg end)
+(defun treesit-fold--overlays-in (prop name &optional beg end)
   "Return overlays with PROP of NAME, from region BEG to END."
   (unless beg (setq beg (point-min))) (unless end (setq end (point-max)))
   (let ((lst '()) (ovs (overlays-in beg end)))
@@ -83,7 +83,7 @@ Like function `s-count-matches' but faster."
 ;; (@* "Face" )
 ;;
 
-(defvar ts-fold--doc-faces
+(defvar treesit-fold--doc-faces
   '(font-lock-doc-face
     font-lock-comment-face
     font-lock-comment-delimiter-face
@@ -93,7 +93,7 @@ Like function `s-count-matches' but faster."
     rst-comment)
   "List of face that apply for document string.")
 
-(defun ts-fold--get-face (obj trim)
+(defun treesit-fold--get-face (obj trim)
   "Return face name from OBJ.
 If argument TRIM is non-nil, trim the OBJ."
   (let* ((obj (if trim (string-trim obj) obj))
@@ -102,39 +102,39 @@ If argument TRIM is non-nil, trim the OBJ."
         (and (<= 1 len)
              (get-text-property 1 'face obj)))))
 
-(defun ts-fold--is-face (obj lst-face &optional trim)
+(defun treesit-fold--is-face (obj lst-face &optional trim)
   "Return non-nil if OBJ's face is define inside list LST-FACE.
-Optional argument TRIM, see function `ts-fold--get-face'."
+Optional argument TRIM, see function `treesit-fold--get-face'."
   (unless (listp lst-face) (setq lst-face (list lst-face)))
-  (let ((faces (ts-fold--get-face obj trim)))
+  (let ((faces (treesit-fold--get-face obj trim)))
     (cond ((listp faces)
            (cl-some (lambda (face) (memq face lst-face)) faces))
           (t (memq faces lst-face)))))
 
-(defun ts-fold--doc-faces-p (obj &optional trim)
-  "Return non-nil if face at OBJ is within `ts-fold--doc-faces' list.
-Optional argument TRIM, see function `ts-fold--get-face'."
-  (ts-fold--is-face obj ts-fold--doc-faces trim))
+(defun treesit-fold--doc-faces-p (obj &optional trim)
+  "Return non-nil if face at OBJ is within `treesit-fold--doc-faces' list.
+Optional argument TRIM, see function `treesit-fold--get-face'."
+  (treesit-fold--is-face obj treesit-fold--doc-faces trim))
 
 ;;
 ;; (@* "Positions" )
 ;;
 
-(defun ts-fold--last-eol (pos)
+(defun treesit-fold--last-eol (pos)
   "Go to POS then find previous line break, and return its position."
   (save-excursion
     (goto-char pos)
     (max 1 (1- (line-beginning-position)))))
 
-(defun ts-fold--bol (point)
+(defun treesit-fold--bol (point)
   "Return line beginning position at POINT."
   (save-excursion (goto-char point) (line-beginning-position)))
 
-(defun ts-fold--eol (point)
+(defun treesit-fold--eol (point)
   "Return line end position at POINT."
   (save-excursion (goto-char point) (line-end-position)))
 
-(defun ts-fold--indentation (pos)
+(defun treesit-fold--indentation (pos)
   "Return current indentation by POS."
   (goto-char pos)
   (current-indentation))
@@ -143,7 +143,7 @@ Optional argument TRIM, see function `ts-fold--get-face'."
 ;; (@* "Math" )
 ;;
 
-(defun ts-fold--in-range-p (in-val in-min in-max)
+(defun treesit-fold--in-range-p (in-val in-min in-max)
   "Check to see if IN-VAL is between IN-MIN and IN-MAX."
   (and (<= in-min in-val) (<= in-val in-max)))
 
@@ -151,7 +151,7 @@ Optional argument TRIM, see function `ts-fold--get-face'."
 ;; (@* "List" )
 ;;
 
-(defun ts-fold-listify (obj)
+(defun treesit-fold-listify (obj)
   "Ensure OBJ is a list."
   (if (listp obj) obj (list obj)))
 
@@ -159,7 +159,7 @@ Optional argument TRIM, see function `ts-fold--get-face'."
 ;; (@* "Window" )
 ;;
 
-(defmacro ts-fold--with-selected-window (window &rest body)
+(defmacro treesit-fold--with-selected-window (window &rest body)
   "Same with `with-selected-window' but safe.
 
 See macro `with-selected-window' description for arguments WINDOW and BODY."
@@ -170,54 +170,54 @@ See macro `with-selected-window' description for arguments WINDOW and BODY."
 ;; (@* "TS node" )
 ;;
 
-(defun ts-fold--compare-type (node type)
+(defun treesit-fold--compare-type (node type)
   "Compare NODE's type to TYPE."
   ;; tsc-node-type returns a symbol or a string and `string=' automatically
   ;; converts symbols to strings
   (string= (tsc-node-type node) type))
 
-(defun ts-fold-get-children (node)
+(defun treesit-fold-get-children (node)
   "Get list of direct children of NODE."
   (let (children)
     (dotimes (index (tsc-count-children node))
       (push (tsc-get-nth-child node index) children))
     (reverse children)))
 
-(defun ts-fold-get-children-traverse (node)
+(defun treesit-fold-get-children-traverse (node)
   "Return children from NODE but traverse it."
   (let (nodes)
     (tsc-traverse-mapc (lambda (child) (push child nodes)) node)
     (reverse nodes)))
 
-(defun ts-fold-find-children (node type)
+(defun treesit-fold-find-children (node type)
   "Search through the children of NODE to find all with type equal to TYPE;
 then return that list."
-  (cl-remove-if-not (lambda (child) (ts-fold--compare-type child type))
-                    (ts-fold-get-children node)))
+  (cl-remove-if-not (lambda (child) (treesit-fold--compare-type child type))
+                    (treesit-fold-get-children node)))
 
-(defun ts-fold-find-children-traverse (node type)
-  "Like function `ts-fold-find-children' but traverse it.
+(defun treesit-fold-find-children-traverse (node type)
+  "Like function `treesit-fold-find-children' but traverse it.
 
-For arguments NODE and TYPE, see function `ts-fold-find-children' for more
+For arguments NODE and TYPE, see function `treesit-fold-find-children' for more
 information."
-  (cl-remove-if-not (lambda (child) (ts-fold--compare-type child type))
-                    (ts-fold-get-children-traverse node)))
+  (cl-remove-if-not (lambda (child) (treesit-fold--compare-type child type))
+                    (treesit-fold-get-children-traverse node)))
 
-(defun ts-fold-find-parent (node type)
+(defun treesit-fold-find-parent (node type)
   "Find the TYPE of parent from NODE."
   (let ((parent (tsc-get-parent node))
         (break))
     (while (and parent (not break))
-      (setq break (ts-fold--compare-type parent type))
+      (setq break (treesit-fold--compare-type parent type))
       (unless break
         (setq parent (tsc-get-parent parent))))
     parent))
 
-(defun ts-fold-last-child (node)
+(defun treesit-fold-last-child (node)
   "Return last child node from parent NODE."
   (when-let* ((count (tsc-count-children node))
               ((not (= count 0))))
     (tsc-get-nth-child node (1- count))))
 
-(provide 'ts-fold-util)
-;;; ts-fold-util.el ends here
+(provide 'treesit-fold-util)
+;;; treesit-fold-util.el ends here

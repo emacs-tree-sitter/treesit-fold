@@ -56,7 +56,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 * `Julia` language support (#33)
 * Remove redundant fold node alist (#36)
 * Change global mode to turn on with tree-sitter (#41)
-* Add minor-mode `ts-fold-line-comment-mode` for line comment folding (#45)
+* Add minor-mode `treesit-fold-line-comment-mode` for line comment folding (#45)
 * Improve folding for C preprocessor operators (#46)
 * Add more folding definitions (#51)
 * Add support for `Lua` (#52)

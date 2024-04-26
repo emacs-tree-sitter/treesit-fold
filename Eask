@@ -1,19 +1,19 @@
-(package "ts-fold"
+(package "treesit-fold"
          "0.3.1"
-         "Code folding using tree-sitter")
+         "Code folding using treesit")
 
-(website-url "https://github.com/emacs-tree-sitter/ts-fold")
+(website-url "https://github.com/emacs-tree-sitter/treesit-fold")
 (keywords "convenience" "folding" "tree-sitter")
 
-(package-file "ts-fold.el")
-(files "ts-*.el")
+(package-file "treesit-fold.el")
+(files "treesit-*.el")
 
 (script "test" "echo \"Error: no test specified\" && exit 1")
 
 (source "gnu")
 (source "melpa")
 
-(depends-on "emacs" "26.1")
+(depends-on "emacs" "29.1")
 (depends-on "tree-sitter")
 (depends-on "s")
 (depends-on "fringe-helper")
