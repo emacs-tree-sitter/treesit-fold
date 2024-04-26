@@ -7,8 +7,8 @@
 
 [![CI](https://github.com/emacs-tree-sitter/treesit-fold/actions/workflows/test.yml/badge.svg)](https://github.com/emacs-tree-sitter/treesit-fold/actions/workflows/test.yml)
 
-`treesit-fold` builds on top of [elisp-tree-sitter](https://github.com/emacs-tree-sitter/elisp-tree-sitter)
-to provide code folding based on the tree-sitter syntax tree.
+`treesit-fold` builds on top of `treesit.el` to provide code folding based on
+the tree-sitter syntax tree.
 
 <p align="center">
 <img src="./etc/screenshot.png" width="80%" height="80%"/>
