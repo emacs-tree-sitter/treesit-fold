@@ -27,6 +27,8 @@
 
 (require 's)
 
+(require 'treesit-fold-util)
+
 (defcustom treesit-fold-summary-show t
   "Flag to show summary if available."
   :type 'boolean
@@ -194,35 +196,6 @@ type of content by checking the word boundary's existence."
 ;; (@* "Core" )
 ;;
 
-(defun treesit-fold-summary--keep-length (summary)
-  "Keep the SUMMARY length to `treesit-fold-summary-max-length'."
-  (let ((len-sum (length summary))
-        (len-exc (length treesit-fold-summary-exceeded-string)))
-    (when (< treesit-fold-summary-max-length len-sum)
-      (setq summary (substring summary 0 (- treesit-fold-summary-max-length len-exc))
-            summary (concat summary treesit-fold-summary-exceeded-string))))
-  summary)
-
-(defun treesit-fold-summary--apply-format (summary)
-  "Return the SUMMARY that has added the summary prefix."
-  (format treesit-fold-summary-format summary))
-
-(defun treesit-fold-summary--parser ()
-  "Return the summary parser from `treesit-fold-summary-parsers-alist'."
-  (assoc (buffer-local-value 'major-mode (current-buffer)) treesit-fold-summary-parsers-alist))
-
-(defun treesit-fold-summary--get (doc-str)
-  "Extract summary from DOC-STR in order to display ontop of the overlay."
-  (let ((parser (cdr (treesit-fold-summary--parser))) summary)
-    (when parser
-      (setq summary (funcall parser doc-str))
-      (when (integerp treesit-fold-summary-max-length)
-        (setq summary (treesit-fold-summary--keep-length summary)))
-      (when summary
-        (setq summary (treesit-fold-summary--apply-format summary)
-              summary (propertize summary 'face 'treesit-fold-replacement-face))))
-    summary))
-
 ;; TODO(everyone): keep this alist alphabetically sorted
 (defcustom treesit-fold-summary-parsers-alist
   `((actionscript-mode      . treesit-fold-summary-javadoc)
@@ -312,6 +285,35 @@ type of content by checking the word boundary's existence."
   "Alist mapping `major-mode' to doc parser function."
   :type '(alist :key-type symbol :value-type function)
   :group 'treesit-fold)
+
+(defun treesit-fold-summary--keep-length (summary)
+  "Keep the SUMMARY length to `treesit-fold-summary-max-length'."
+  (let ((len-sum (length summary))
+        (len-exc (length treesit-fold-summary-exceeded-string)))
+    (when (< treesit-fold-summary-max-length len-sum)
+      (setq summary (substring summary 0 (- treesit-fold-summary-max-length len-exc))
+            summary (concat summary treesit-fold-summary-exceeded-string))))
+  summary)
+
+(defun treesit-fold-summary--apply-format (summary)
+  "Return the SUMMARY that has added the summary prefix."
+  (format treesit-fold-summary-format summary))
+
+(defun treesit-fold-summary--parser ()
+  "Return the summary parser from `treesit-fold-summary-parsers-alist'."
+  (assoc (buffer-local-value 'major-mode (current-buffer)) treesit-fold-summary-parsers-alist))
+
+(defun treesit-fold-summary--get (doc-str)
+  "Extract summary from DOC-STR in order to display ontop of the overlay."
+  (let ((parser (cdr (treesit-fold-summary--parser))) summary)
+    (when parser
+      (setq summary (funcall parser doc-str))
+      (when (integerp treesit-fold-summary-max-length)
+        (setq summary (treesit-fold-summary--keep-length summary)))
+      (when summary
+        (setq summary (treesit-fold-summary--apply-format summary)
+              summary (propertize summary 'face 'treesit-fold-replacement-face))))
+    summary))
 
 (provide 'treesit-fold-summary)
 ;;; treesit-fold-summary.el ends here
