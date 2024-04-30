@@ -566,8 +566,11 @@
     (match_block            . treesit-fold-range-seq)
     (macro_definition       . (treesit-fold-range-rust-macro 1 -1))
     (block                  . treesit-fold-range-seq)
-    (line_comment           . (lambda (node offset)
-                                (treesit-fold-range-line-comment node offset "///")))
+    (line_comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node
+                                          (treesit-fold--cons-add offset '(0 . -1))
+                                          "///")))
     (block_comment          . treesit-fold-range-block-comment)))
 
 (defun treesit-fold-parsers-scala ()
