@@ -589,10 +589,14 @@
 
 (defun treesit-fold-parsers-sql ()
   "Rule set for SQL."
-  '((block      . treesit-fold-range-sql-block)
-    (subquery   . treesit-fold-range-seq)
-    (list       . treesit-fold-range-seq)
-    (marginalia . treesit-fold-range-c-like-comment)))  ; This is the comment!
+  '((block              . treesit-fold-range-sql-block)
+    (subquery           . treesit-fold-range-seq)
+    (list               . treesit-fold-range-seq)
+    (column_definitions . treesit-fold-range-seq)
+    (marginalia         . treesit-fold-range-c-like-comment)  ; This is the comment!
+    (comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "--")))))
 
 (defun treesit-fold-parsers-svelte ()
   "Rule set for Svelte."
