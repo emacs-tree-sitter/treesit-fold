@@ -346,7 +346,7 @@
 (defun treesit-fold-parsers-julia ()
   "Rule set for Julia."
   '((block_comment       . (treesit-fold-range-seq 1 -1))
-    (for_statement       . (treesit-fold-range-seq 2 -2))
+    (for_statement       . treesit-fold-range-julia-if)
     (function_definition . treesit-fold-range-julia-function)
     (if_statement        . treesit-fold-range-julia-if)
     (let_statement       . treesit-fold-range-julia-let)
@@ -436,12 +436,19 @@
   "Rule set for MATLAB."
   '((expression_list     . treesit-fold-range-seq)
     (function_definition . treesit-fold-range-matlab-function)
+    (properties          . treesit-fold-range-matlab-function)
+    (methods             . treesit-fold-range-matlab-function)
     (class_definition    . treesit-fold-range-matlab-function)
     (if_statement        . treesit-fold-range-matlab-statements)
+    (elseif_clause       . treesit-fold-range-matlab-statements)
+    (else_clause         . treesit-fold-range-matlab-statements)
     (for_statement       . treesit-fold-range-matlab-statements)
     (while_statement     . treesit-fold-range-matlab-statements)
     (switch_statement    . treesit-fold-range-matlab-statements)
+    (case_clause         . treesit-fold-range-matlab-statements)
+    (otherwise_clause    . treesit-fold-range-matlab-statements)
     (try_statement       . treesit-fold-range-matlab-statements)
+    (catch_clause        . treesit-fold-range-matlab-statements)
     (comment             . treesit-fold-range-matlab-blocks)))
 
 (defun treesit-fold-parsers-mermaid ()
