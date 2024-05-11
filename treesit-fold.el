@@ -164,6 +164,11 @@ the fold in a cons cell.  See `treesit-fold-range-python-def' for an example."
   :type 'hook
   :group 'treesit-fold)
 
+(defcustom treesit-fold-on-fold-hook nil
+  "Hook runs on folding."
+  :type 'hook
+  :group 'treesit-fold)
+
 (defcustom treesit-fold-on-next-line t
   "If non-nil, we leave ending keywords on the next line.
 
@@ -380,7 +385,8 @@ If no NODE is found in point, do nothing."
       (when-let* ((ov (treesit-fold-overlay-at node)))
         (delete-overlay ov))
       (when-let* ((range (treesit-fold--get-fold-range node)))
-        (treesit-fold--create-overlay range)))))
+        (treesit-fold--create-overlay range)
+        (run-hooks 'treesit-fold-on-fold-hook)))))
 
 ;;;###autoload
 (defun treesit-fold-open ()
@@ -391,6 +397,7 @@ If the current node is not folded or not foldable, do nothing."
     (when-let* ((node (treesit-fold--foldable-node-at-pos))
                 (ov (treesit-fold-overlay-at node)))
       (delete-overlay ov)
+      (run-hooks 'treesit-fold-on-fold-hook)
       t)))
 
 ;;;###autoload
@@ -403,32 +410,37 @@ If the current node is not folded or not foldable, do nothing."
                 (end (tsc-node-end-position node)))
       (thread-last (overlays-in beg end)
                    (seq-filter (lambda (ov) (eq (overlay-get ov 'invisible) 'treesit-fold)))
-                   (mapc #'delete-overlay)))))
+                   (mapc #'delete-overlay))
+      (run-hooks 'treesit-fold-on-fold-hook))))
 
 ;;;###autoload
 (defun treesit-fold-close-all ()
   "Fold all foldable syntax nodes in the buffer."
   (interactive)
   (treesit-fold--ensure-ts
-    (let* ((treesit-fold-indicators-mode)
-           (node (tsc-root-node tree-sitter-tree))
-           (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
-                                 (alist-get major-mode treesit-fold-range-alist)
-                                 'vector))
-           (query (tsc-make-query tree-sitter-language patterns))
-           (nodes-to-fold (tsc-query-captures query node #'ignore)))
-      (thread-last nodes-to-fold
-                   (mapcar #'cdr)
-                   (mapc #'treesit-fold-close)))))
+    (let (nodes)
+      (let* ((treesit-fold-indicators-mode)
+             (treesit-fold-on-fold-hook)
+             (node (tsc-root-node tree-sitter-tree))
+             (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
+                                   (alist-get major-mode treesit-fold-range-alist)
+                                   'vector))
+             (query (tsc-make-query tree-sitter-language patterns)))
+        (setq nodes (tsc-query-captures query node #'ignore))
+        (thread-last nodes
+                     (mapcar #'cdr)
+                     (mapc #'treesit-fold-close)))
+      (when nodes
+        (run-hooks 'treesit-fold-on-fold-hook)))))
 
 ;;;###autoload
 (defun treesit-fold-open-all ()
   "Unfold all syntax nodes in the buffer."
   (interactive)
   (treesit-fold--ensure-ts
-    (thread-last (overlays-in (point-min) (point-max))
-                 (seq-filter (lambda (ov) (eq (overlay-get ov 'invisible) 'treesit-fold)))
-                 (mapc #'delete-overlay))))
+    (when-let ((nodes (treesit-fold--overlays-in 'invisible 'treesit-fold)))
+      (mapc #'delete-overlay nodes)
+      (run-hooks 'treesit-fold-on-fold-hook))))
 
 ;;;###autoload
 (defun treesit-fold-toggle ()
@@ -438,7 +450,10 @@ If the current syntax node is not foldable, do nothing."
   (treesit-fold--ensure-ts
     (if-let* ((node (treesit-fold--foldable-node-at-pos (point)))
               (ov (treesit-fold-overlay-at node)))
-        (progn (delete-overlay ov) t)
+        (progn
+          (delete-overlay ov)
+          (run-hooks 'treesit-fold-on-fold-hook)
+          t)
       (treesit-fold-close))))
 
 (defun treesit-fold--after-command (&rest _)
