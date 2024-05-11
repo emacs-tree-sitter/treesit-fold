@@ -407,10 +407,9 @@ If the current node is not folded or not foldable, do nothing."
   (treesit-fold--ensure-ts
     (when-let* ((node (treesit-fold--foldable-node-at-pos))
                 (beg (tsc-node-start-position node))
-                (end (tsc-node-end-position node)))
-      (thread-last (overlays-in beg end)
-                   (seq-filter (lambda (ov) (eq (overlay-get ov 'invisible) 'treesit-fold)))
-                   (mapc #'delete-overlay))
+                (end (tsc-node-end-position node))
+                (nodes (treesit-fold--overlays-in 'invisible 'treesit-fold beg end)))
+      (mapc #'delete-overlay nodes)
       (run-hooks 'treesit-fold-on-fold-hook))))
 
 ;;;###autoload
