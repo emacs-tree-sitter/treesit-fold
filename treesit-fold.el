@@ -386,7 +386,8 @@ If no NODE is found in point, do nothing."
         (delete-overlay ov))
       (when-let* ((range (treesit-fold--get-fold-range node)))
         (treesit-fold--create-overlay range)
-        (run-hooks 'treesit-fold-on-fold-hook)))))
+        (run-hooks 'treesit-fold-on-fold-hook)
+        t))))
 
 ;;;###autoload
 (defun treesit-fold-open ()
@@ -410,7 +411,8 @@ If the current node is not folded or not foldable, do nothing."
                 (end (tsc-node-end-position node))
                 (nodes (treesit-fold--overlays-in 'invisible 'treesit-fold beg end)))
       (mapc #'delete-overlay nodes)
-      (run-hooks 'treesit-fold-on-fold-hook))))
+      (run-hooks 'treesit-fold-on-fold-hook)
+      t)))
 
 ;;;###autoload
 (defun treesit-fold-close-all ()
@@ -430,7 +432,8 @@ If the current node is not folded or not foldable, do nothing."
                      (mapcar #'cdr)
                      (mapc #'treesit-fold-close)))
       (when nodes
-        (run-hooks 'treesit-fold-on-fold-hook)))))
+        (run-hooks 'treesit-fold-on-fold-hook)
+        t))))
 
 ;;;###autoload
 (defun treesit-fold-open-all ()
@@ -439,7 +442,8 @@ If the current node is not folded or not foldable, do nothing."
   (treesit-fold--ensure-ts
     (when-let ((nodes (treesit-fold--overlays-in 'invisible 'treesit-fold)))
       (mapc #'delete-overlay nodes)
-      (run-hooks 'treesit-fold-on-fold-hook))))
+      (run-hooks 'treesit-fold-on-fold-hook)
+      t)))
 
 ;;;###autoload
 (defun treesit-fold-toggle ()
