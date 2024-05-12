@@ -607,7 +607,10 @@
 
 (defun treesit-fold-parsers-svelte ()
   "Rule set for Svelte."
-  (append (treesit-fold-parsers-html)))
+  (append
+   (treesit-fold-parsers-html)
+   '((script_element . treesit-fold-range-html)
+     (style_element  . treesit-fold-range-html))))
 
 (defun treesit-fold-parsers-swift ()
   "Rule set for Swift."
