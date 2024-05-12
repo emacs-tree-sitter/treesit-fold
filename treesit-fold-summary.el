@@ -233,6 +233,7 @@ type of content by checking the word boundary's existence."
     (js-mode                . treesit-fold-summary-javadoc)
     (js2-mode               . treesit-fold-summary-javadoc)
     (js3-mode               . treesit-fold-summary-javadoc)
+    (json-mode              . treesit-fold-summary-javadoc)
     (jsonnet-mode           . treesit-fold-summary-javadoc)
     (julia-mode             . treesit-fold-summary-julia-doc)
     (kotlin-mode            . treesit-fold-summary-javadoc)

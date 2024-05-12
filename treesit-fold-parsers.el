@@ -334,8 +334,9 @@
 
 (defun treesit-fold-parsers-json ()
   "Rule set for JSON."
-  '((object . treesit-fold-range-seq)
-    (array  . treesit-fold-range-seq)))
+  '((object  . treesit-fold-range-seq)
+    (array   . treesit-fold-range-seq)
+    (comment . treesit-fold-range-c-like-comment)))
 
 (defun treesit-fold-parsers-jsonnet ()
   "Rule set for Jsonnet."
