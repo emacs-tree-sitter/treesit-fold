@@ -342,7 +342,8 @@ This function is borrowed from `tree-sitter-node-at-point'."
                                         (treesit-fold-summary--get (buffer-substring beg end)))
                                    treesit-fold-replacement))
       (overlay-put ov 'face 'treesit-fold-replacement-face)
-      (overlay-put ov 'isearch-open-invisible #'treesit-fold--isearch-open))))
+      (overlay-put ov 'isearch-open-invisible #'treesit-fold--isearch-open)
+      ov)))
 
 (defun treesit-fold--isearch-open (ov)
   "Open overlay OV during `isearch' session."
@@ -384,10 +385,10 @@ If no NODE is found in point, do nothing."
       ;; make sure I do not create multiple overlays for the same fold
       (when-let* ((ov (treesit-fold-overlay-at node)))
         (delete-overlay ov))
-      (when-let* ((range (treesit-fold--get-fold-range node)))
-        (treesit-fold--create-overlay range)
+      (when-let* ((range (treesit-fold--get-fold-range node))
+                  (ov (treesit-fold--create-overlay range)))
         (run-hooks 'treesit-fold-on-fold-hook)
-        t))))
+        ov))))
 
 ;;;###autoload
 (defun treesit-fold-open ()
