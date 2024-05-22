@@ -634,7 +634,7 @@ more information."
               (end (tsc-node-end-position end)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
-(defun -fold-range-beancount-transaction (node offset)
+(defun treesit-fold-range-beancount-transaction (node offset)
   "Define fold range for `transaction' in Beancount.
 
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
