@@ -345,11 +345,13 @@ This function is borrowed from `tree-sitter-node-at-point'."
       (overlay-put ov 'modification-hooks '(treesit-fold--on-change))
       (overlay-put ov 'insert-in-front-hooks '(treesit-fold--on-change))
       (overlay-put ov 'isearch-open-invisible #'treesit-fold--on-change)
-      (overlay-put ov 'isearch-open-invisible-temporary
-                   (lambda (ov hide-p)
-                     (if hide-p (treesit-fold--hide-ov ov)
-                       (treesit-fold--show-ov ov))))
+      (overlay-put ov 'isearch-open-invisible-temporary #'treesit-fold--open-invisible-temporary)
       ov)))
+
+(defun treesit-fold--open-invisible-temporary (ov hide-p)
+  "Temporary show/hide OV depends on HIDE-P flag."
+  (if hide-p (treesit-fold--hide-ov ov)
+    (treesit-fold--show-ov ov)))
 
 (defun treesit-fold--on-change (ov &rest _)
   "Open overlay OV during content is changed."
@@ -359,7 +361,8 @@ This function is borrowed from `tree-sitter-node-at-point'."
   "Show the OV."
   (overlay-put ov 'invisible nil)
   (overlay-put ov 'display nil)
-  (overlay-put ov 'face nil))
+  (overlay-put ov 'face nil)
+  (treesit-fold-indicators-refresh))
 
 (defun treesit-fold--hide-ov (ov &rest _)
   "Hide the OV."
@@ -369,7 +372,8 @@ This function is borrowed from `tree-sitter-node-at-point'."
     (overlay-put ov 'display (or (and treesit-fold-summary-show
                                       (treesit-fold-summary--get (buffer-substring beg end)))
                                  treesit-fold-replacement))
-    (overlay-put ov 'face 'treesit-fold-replacement-face)))
+    (overlay-put ov 'face 'treesit-fold-replacement-face))
+  (treesit-fold-indicators-refresh))
 
 (defun treesit-fold-overlay-at (node)
   "Return the treesit-fold overlay at NODE if NODE is foldable and folded.
