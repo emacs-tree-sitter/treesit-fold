@@ -8,7 +8,7 @@
 ;; Author: Junyi Hou <junyi.yi.hou@gmail.com>
 ;;         Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-tree-sitter/treesit-fold
-;; Version: 0.3.1
+;; Version: 0.1.0
 ;; Package-Requires: ((emacs "29.1") (tree-sitter "0.15.1") (s "1.9.0") (fringe-helper "1.0.1"))
 ;; Keywords: convenience folding tree-sitter
 
@@ -342,12 +342,34 @@ This function is borrowed from `tree-sitter-node-at-point'."
                                         (treesit-fold-summary--get (buffer-substring beg end)))
                                    treesit-fold-replacement))
       (overlay-put ov 'face 'treesit-fold-replacement-face)
-      (overlay-put ov 'isearch-open-invisible #'treesit-fold--isearch-open)
+      (overlay-put ov 'modification-hooks '(treesit-fold--on-change))
+      (overlay-put ov 'insert-in-front-hooks '(treesit-fold--on-change))
+      (overlay-put ov 'isearch-open-invisible #'treesit-fold--on-change)
+      (overlay-put ov 'isearch-open-invisible-temporary
+                   (lambda (ov hide-p)
+                     (if hide-p (treesit-fold--hide-ov ov)
+                       (treesit-fold--show-ov ov))))
       ov)))
 
-(defun treesit-fold--isearch-open (ov)
-  "Open overlay OV during `isearch' session."
+(defun treesit-fold--on-change (ov &rest _)
+  "Open overlay OV during content is changed."
   (delete-overlay ov))
+
+(defun treesit-fold--show-ov (ov &rest _)
+  "Show the OV."
+  (overlay-put ov 'invisible nil)
+  (overlay-put ov 'display nil)
+  (overlay-put ov 'face nil))
+
+(defun treesit-fold--hide-ov (ov &rest _)
+  "Hide the OV."
+  (let ((beg (overlay-start ov))
+        (end (overlay-end ov)))
+    (overlay-put ov 'invisible 'treesit-fold)
+    (overlay-put ov 'display (or (and treesit-fold-summary-show
+                                      (treesit-fold-summary--get (buffer-substring beg end)))
+                                 treesit-fold-replacement))
+    (overlay-put ov 'face 'treesit-fold-replacement-face)))
 
 (defun treesit-fold-overlay-at (node)
   "Return the treesit-fold overlay at NODE if NODE is foldable and folded.
