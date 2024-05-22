@@ -8,7 +8,7 @@
 ;; Author: Junyi Hou <junyi.yi.hou@gmail.com>
 ;;         Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-tree-sitter/treesit-fold
-;; Version: 0.3.1
+;; Version: 0.1.0
 ;; Package-Requires: ((emacs "29.1") (tree-sitter "0.15.1") (s "1.9.0") (fringe-helper "1.0.1"))
 ;; Keywords: convenience folding tree-sitter
 
