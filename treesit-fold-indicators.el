@@ -138,8 +138,9 @@
   :lighter nil
   :keymap treesit-fold-indicators-mode-map
   :init-value nil
-  (if treesit-fold-indicators-mode (treesit-fold-indicators--enable)
-    (treesit-fold-indicators--disable)))
+  (tree-sitter--handle-dependent treesit-fold-indicators-mode
+    #'treesit-fold-indicators--enable
+    #'treesit-fold-indicators--disable))
 
 ;;;###autoload
 (define-minor-mode global-treesit-fold-indicators-mode

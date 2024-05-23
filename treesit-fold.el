@@ -245,7 +245,9 @@ treesit-fold can act on."
   :group 'treesit-fold
   :init-value nil
   :lighter "Treesit-Fold"
-  (if treesit-fold-mode (treesit-fold--enable) (treesit-fold--disable)))
+  (tree-sitter--handle-dependent treesit-fold-mode
+    #'treesit-fold--enable
+    #'treesit-fold--disable))
 
 ;;;###autoload
 (define-minor-mode global-treesit-fold-mode
