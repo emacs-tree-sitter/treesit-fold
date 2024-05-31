@@ -58,6 +58,11 @@
                  (const :tag "Inaccurate rendering but fast" partial))
   :group 'treesit-fold)
 
+(defcustom treesit-fold-indicators-refresh-hook nil
+  "Hook run after indicators refresh."
+  :type 'hook
+  :group 'treesit-fold)
+
 (fringe-helper-define 'treesit-fold-indicators-fr-plus nil
   "XXXXXXX"
   "X.....X"
@@ -362,7 +367,8 @@ Optional arguments WEND and WSTART are the range for caching."
        (treesit-fold-indicators--remove-ovs)
        (thread-last nodes-to-fold
                     (mapcar #'cdr)
-                    (mapc #'treesit-fold-indicators--create))))))
+                    (mapc #'treesit-fold-indicators--create))
+       (run-hooks 'treesit-fold-indicators-refresh-hook)))))
 
 (defun treesit-fold-indicators--remove-ovs (&optional window)
   "Remove all indicators overlays in this WINDOW."
