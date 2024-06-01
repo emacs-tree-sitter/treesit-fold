@@ -9,3 +9,4 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 > Released N/A
 
 * feat: Fully support `isearch` and modification conditions (#1)
+* fix: Respect same line folding from close all (4ef65016fdfdc6d45567ac62bf25814b07a8cad7)
