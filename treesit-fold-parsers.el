@@ -574,6 +574,7 @@
     (match_block            . treesit-fold-range-seq)
     (macro_definition       . (treesit-fold-range-rust-macro 1 -1))
     (block                  . treesit-fold-range-seq)
+    (token_tree             . treesit-fold-range-seq)
     (line_comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node
