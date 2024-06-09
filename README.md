@@ -488,11 +488,6 @@ turn off `treesit-fold-mode`
   (advice-add 'line-reminder-transfer-to-saved-lines :after
               ;; Refresh indicators for package `treesit-fold'.
               #'treesit-fold-indicators-refresh)
-
-  (add-hook 'treesit-fold-indicators-refresh-hook
-            (lambda (&rest _)
-              (line-reminder--render-buffer)
-              (line-reminder--thumb-render-buffer)))
   ```
 
 ### 📝 Summary
