@@ -25,8 +25,6 @@
 
 ;;; Code:
 
-(require 'tsc)
-
 ;;
 ;; (@* "Redisplay" )
 ;;
@@ -174,52 +172,29 @@ See macro `with-selected-window' description for arguments WINDOW and BODY."
 
 (defun treesit-fold--compare-type (node type)
   "Compare NODE's type to TYPE."
-  ;; tsc-node-type returns a symbol or a string and `string=' automatically
-  ;; converts symbols to strings
-  (string= (tsc-node-type node) type))
-
-(defun treesit-fold-get-children (node)
-  "Get list of direct children of NODE."
-  (let (children)
-    (dotimes (index (tsc-count-children node))
-      (push (tsc-get-nth-child node index) children))
-    (reverse children)))
-
-(defun treesit-fold-get-children-traverse (node)
-  "Return children from NODE but traverse it."
-  (let (nodes)
-    (tsc-traverse-mapc (lambda (child) (push child nodes)) node)
-    (reverse nodes)))
+  (string= (treesit-node-type node) type))
 
 (defun treesit-fold-find-children (node type)
   "Search through the children of NODE to find all with type equal to TYPE;
 then return that list."
   (cl-remove-if-not (lambda (child) (treesit-fold--compare-type child type))
-                    (treesit-fold-get-children node)))
-
-(defun treesit-fold-find-children-traverse (node type)
-  "Like function `treesit-fold-find-children' but traverse it.
-
-For arguments NODE and TYPE, see function `treesit-fold-find-children' for more
-information."
-  (cl-remove-if-not (lambda (child) (treesit-fold--compare-type child type))
-                    (treesit-fold-get-children-traverse node)))
+                    (treesit-node-children node)))
 
 (defun treesit-fold-find-parent (node type)
   "Find the TYPE of parent from NODE."
-  (let ((parent (tsc-get-parent node))
+  (let ((parent (treesit-node-parent node))
         (break))
     (while (and parent (not break))
       (setq break (treesit-fold--compare-type parent type))
       (unless break
-        (setq parent (tsc-get-parent parent))))
+        (setq parent (treesit-node-parent parent))))
     parent))
 
 (defun treesit-fold-last-child (node)
   "Return last child node from parent NODE."
-  (when-let* ((count (tsc-count-children node))
+  (when-let* ((count (treesit-node-child-count node))
               ((not (= count 0))))
-    (tsc-get-nth-child node (1- count))))
+    (treesit-node-child node (1- count))))
 
 (provide 'treesit-fold-util)
 ;;; treesit-fold-util.el ends here
