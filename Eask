@@ -14,7 +14,6 @@
 (source "melpa")
 
 (depends-on "emacs" "29.1")
-(depends-on "tree-sitter")
 (depends-on "s")
 (depends-on "fringe-helper")
 

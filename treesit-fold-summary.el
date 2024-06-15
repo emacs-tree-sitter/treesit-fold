@@ -105,7 +105,7 @@ type of content by checking the word boundary's existence."
 (defun treesit-fold-summary-csharp-vsdoc (doc-str)
   "Extract summary from DOC-STR in C# vsdoc."
   (let ((type-triple (string-match-p "///" doc-str)))
-    (setq doc-str (s-replace-regexp "<[/]*[^>]+." "" doc-str))
+    (setq doc-str (s-replace-regexp "<[/]*[^>]+." "" doc-str)) ; should use `replace-regexp-in-string'?
     (treesit-fold-summary--generic doc-str (if type-triple "///" "//"))))
 
 (defun treesit-fold-summary-csharp (doc-str)
@@ -306,14 +306,18 @@ type of content by checking the word boundary's existence."
 
 (defun treesit-fold-summary--get (doc-str)
   "Extract summary from DOC-STR in order to display ontop of the overlay."
-  (let ((parser (cdr (treesit-fold-summary--parser))) summary)
+  (let ((parser (cdr (treesit-fold-summary--parser))) summary
+        (map (make-sparse-keymap)))
+    (keymap-set map "<mouse-1>" #'treesit-fold-open)
     (when parser
       (setq summary (funcall parser doc-str))
       (when (integerp treesit-fold-summary-max-length)
         (setq summary (treesit-fold-summary--keep-length summary)))
       (when summary
         (setq summary (treesit-fold-summary--apply-format summary)
-              summary (propertize summary 'face 'treesit-fold-replacement-face))))
+              summary (propertize summary 'face 'treesit-fold-replacement-face
+                                  'mouse-face 'treesit-fold-replacement-mouse-face
+                                  'keymap map))))
     summary))
 
 (provide 'treesit-fold-summary)

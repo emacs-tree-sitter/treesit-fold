@@ -26,6 +26,7 @@ the tree-sitter syntax tree.
 - [🖥 Usage](#🖥-usage)
   - [📇 Commands](#📇-commands)
   - [🔨 Supported languages](#🔨-supported-languages)
+    - [Add support for non-ts modes](#-Add support for non-ts modes)
 - [📝 Customization](#📝-customization)
   - [⚪ Folding on new nodes](#⚪-folding-on-new-nodes)
     - [❔ Example](#❔-example)
@@ -147,6 +148,23 @@ These languages are in development:
 
 *P.S. We don't list trivial languages here. e.g., LLVM IR (`.ll`) files, etc.
 Please see the variable `treesit-fold-range-alist` for the fully supported list!*
+
+#### Add support for non-ts modes
+You can add folding support for non-ts modes (such as c-mode or emacs-lisp-mode),
+this requires you have the parser library for the mode.
+After, you can enable folding adding these code snippets to your configuration:
+
+``` elisp
+;; For `treesit-parser-create' you need to ensure the language fits with
+;; the parser library (e.g `libtree-sitter-cpp.dll' is 'cpp).
+
+(add-hook 'emacs-lisp-mode-hook (lambda () (treesit-parser-create 'elisp)))
+
+;; For use-package users
+(use-package treesit-fold
+  :hook (c-mode . (lambda () (treesit-parser-create 'c)))
+  ...)
+```
 
 ## 📝 Customization
 

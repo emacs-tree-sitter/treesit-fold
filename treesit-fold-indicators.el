@@ -121,7 +121,7 @@
   "Enable `treesit-fold-indicators' mode."
   (if (or treesit-fold-mode (treesit-fold-mode 1))  ; Enable `treesit-fold-mode' automatically
       (progn
-        (add-hook 'tree-sitter-after-change-functions #'treesit-fold-indicators-refresh nil t)
+        (add-hook 'after-change-functions #'treesit-fold-indicators-refresh nil t)
         (add-hook 'after-save-hook #'treesit-fold-indicators-refresh nil t)
         (add-hook 'window-size-change-functions #'treesit-fold-indicators--size-change)
         (add-hook 'window-scroll-functions #'treesit-fold-indicators--scroll)
@@ -130,7 +130,7 @@
 
 (defun treesit-fold-indicators--disable ()
   "Disable `treesit-fold-indicators' mode."
-  (remove-hook 'tree-sitter-after-change-functions #'treesit-fold-indicators-refresh t)
+  (remove-hook 'after-change-functions #'treesit-fold-indicators-refresh t)
   (remove-hook 'after-save-hook #'treesit-fold-indicators-refresh t)
   (remove-hook 'window-size-change-functions #'treesit-fold-indicators--size-change)
   (remove-hook 'window-scroll-functions #'treesit-fold-indicators--scroll)
@@ -138,19 +138,18 @@
 
 ;;;###autoload
 (define-minor-mode treesit-fold-indicators-mode
-  "Minor mode for indicators mode."
+  "Minor mode for display fringe folding indicators."
   :group 'treesit-fold
   :lighter nil
   :keymap treesit-fold-indicators-mode-map
   :init-value nil
-  (tree-sitter--handle-dependent treesit-fold-indicators-mode
-    #'treesit-fold-indicators--enable
-    #'treesit-fold-indicators--disable))
+  (if treesit-fold-indicators-mode
+      (treesit-fold-indicators--enable)
+    (treesit-fold-indicators--disable)))
 
 ;;;###autoload
 (define-minor-mode global-treesit-fold-indicators-mode
-  "Global minor mode for turning on treesit-fold with indicators
-whenever avaliable."
+  "Toggle treesit-fold-indicatos in all buffers avaliable."
   :group 'treesit-fold
   :lighter nil
   :init-value nil
@@ -329,8 +328,8 @@ Optional arguments WEND and WSTART are the range for caching."
        (range (cl-case treesit-fold-indicators-render-method
                 (`full
                  (ignore-errors (treesit-fold--get-fold-range node)))
-                (`partial (cons (tsc-node-start-position node)
-                                (tsc-node-end-position node)))
+                (`partial (cons (treesit-node-start node)
+                                (treesit-node-end node)))
                 (t
                  (user-error "Invalid render method: %s" treesit-fold-indicators-render-method))))
        (start (car range))
@@ -343,16 +342,15 @@ Optional arguments WEND and WSTART are the range for caching."
 ;;;###autoload
 (defun treesit-fold-indicators-refresh (&rest _)
   "Refresh indicators for all folding range."
-  (when (and tree-sitter-mode treesit-fold-indicators-mode)
+  (when (and (ignore-errors (treesit-buffer-root-node)) treesit-fold-indicators-mode)
     (treesit-fold--ensure-ts
      (when-let*
-         ((node (ignore-errors (tsc-root-node tree-sitter-tree)))
+         ((node (ignore-errors (treesit-buffer-root-node)))
           (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
-                                (alist-get major-mode treesit-fold-range-alist)
-                                'vector))
+                                (alist-get major-mode treesit-fold-range-alist)))
           (query (ignore-errors
-                   (tsc-make-query tree-sitter-language patterns)))
-          (nodes-to-fold (tsc-query-captures query node #'ignore))
+                   (treesit-query-compile (treesit-node-language node) patterns)))
+          (nodes-to-fold (treesit-query-capture node query))
           (wend (window-end nil t))
           (wstart (window-start))
           (nodes-to-fold

@@ -103,6 +103,7 @@
 ;; (@* "Parsers" )
 ;;
 
+;; Should these functions be variables?
 ;; TODO(everyone): keep the function alphabetically sorted
 
 (defun treesit-fold-parsers-actionscript ()
@@ -125,7 +126,7 @@
     (block_comment . treesit-fold-range-c-like-comment)
     (line_comment
      . (lambda (node offset)
-         (let ((text (tsc-node-text node)))
+         (let ((text (treesit-node-text node)))
            (cond ((string-prefix-p ";;" text)
                   (treesit-fold-range-line-comment node offset ";;"))
                  ((string-prefix-p "#" text)
@@ -523,17 +524,18 @@
     (compound_statement  . treesit-fold-range-seq)
     (comment
      . (lambda (node offset)
-         (if (string-prefix-p "#" (tsc-node-text node))
+         (if (string-prefix-p "#" (treesit-node-text node))
              (treesit-fold-range-line-comment node offset "#")
            (treesit-fold-range-c-like-comment node offset))))))
 
 (defun treesit-fold-parsers-python ()
   "Rule set for Python."
-  '((function_definition  . treesit-fold-range-python-def)
-    (class_definition     . treesit-fold-range-python-def)
-    (list                 . treesit-fold-range-seq)
-    (dictionary           . treesit-fold-range-seq)
-    (expression_statement . treesit-fold-range-python-expression-statement)
+  '((function_definition      . treesit-fold-range-python-def)
+    (class_definition         . treesit-fold-range-python-def)
+    (list                     . treesit-fold-range-seq)
+    (dictionary               . treesit-fold-range-seq)
+    (parenthesized_expression . treesit-fold-range-seq)
+    (expression_statement     . treesit-fold-range-python-expression-statement)
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))))
