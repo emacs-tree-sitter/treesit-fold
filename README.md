@@ -26,7 +26,7 @@ the tree-sitter syntax tree.
 - [🖥 Usage](#🖥-usage)
   - [📇 Commands](#📇-commands)
   - [🔨 Supported languages](#🔨-supported-languages)
-    - [🚀 Add support for non-ts modes](#🚀-Add support for non-ts modes)
+    - [🚀 Add support for non-ts modes](#🚀-Add-support-for-non-ts-modes)
 - [📝 Customization](#📝-customization)
   - [⚪ Folding on new nodes](#⚪-folding-on-new-nodes)
     - [❔ Example](#❔-example)
@@ -198,8 +198,8 @@ mode and the value being another alist of fold definitions.
 So you can select whatever node that you want to fold on it.
 
 To find what node you'll want to fold closed, refer to the
-[tree-sitter documentation](https://emacs-tree-sitter.github.io/getting-started/#view-the-syntax-tree)
-about viewing nodes. `tree-sitter-debug` and `tree-sitter-query-builder`
+[Emacs tree-sitter documentation](https://www.gnu.org/software/emacs/manual/html_node/elisp/Pattern-Matching.html)
+about viewing nodes. `treesit-inspect-mode` and `treesit-explore-mode`
 are both very useful for this.
 
 For the folding functions, treesit-fold provides some default
@@ -463,16 +463,16 @@ Please note that turning on `treesit-fold-indicators-mode` automatically turns o
 `treesit-fold-mode` as well. Though, turning off `treesit-fold-indicators-mode` does not
 turn off `treesit-fold-mode`
 
-- To enable this automatically whenever `tree-sitter-mode` is enabled, use the global indicator mode:
+- To enable this automatically whenever a buffer has a tree-sitter parser, use the global indicator mode:
 
   ```elisp
   (global-treesit-fold-indicators-mode 1)
   ```
 
-  Else, a hook can be added to tree-sitter directly.
+  Else, you can add a hook directly.
 
   ```elisp
-  (add-hook 'tree-sitter-after-on-hook #'treesit-fold-indicators-mode)
+  (add-hook 'c-ts-mode-hook #'treesit-fold-indicators-mode)
   ```
 
 - To switch to left/right fringe: (Default is `left-fringe`)
@@ -585,9 +585,9 @@ This plugin makes line comment into foldable range.
 [![Donate on paypal](https://img.shields.io/badge/paypal-donate-1?logo=paypal&color=blue)](https://www.paypal.me/jcs090218)
 [![Become a patron](https://img.shields.io/badge/patreon-become%20a%20patron-orange.svg?logo=patreon)](https://www.patreon.com/jcs090218)
 
-Enable `tree-sitter-mode` first, then `tree-sitter-query-builder` is useful to test
+Ensure your buffer has a tree-sitter parser first, then `treesit-explore-mode` is useful to test
 out queries that determine what syntax nodes should be foldable and how to fold
-them. [emacs-tree-sitter](https://ubolonton.github.io/emacs-tree-sitter/syntax-highlighting/queries/)
+them. [Emacs repository](https://git.savannah.gnu.org/cgit/emacs.git/tree/admin/notes/tree-sitter/starter-guide#n130) and [Emacs tree-sitter manual](https://www.gnu.org/software/emacs/manual/html_node/elisp/Pattern-Matching.html)
 has an excellent documentation on how to write `tree-sitter` queries.
 
 ### 🔬 Development
@@ -658,13 +658,12 @@ To look for the correct node you have three options:
   This will display a buffer with the whole s-expr representing nodes at point from the current file/buffer.
 - `M-x treesit-inspect-node-at-point` in your function to display what your
   function is seeing.
-- Also you can use `M-x treesit-inspect-mode` which diplay in the mode-line the current node at point.
+- use `M-x treesit-inspect-mode` which diplay in the mode-line the current node at point.
 
 > ⚠️ Warning
 >
-> Make sure you look into the correct repository. Repositories are managed
-> under [tree-sitter-langs](https://github.com/emacs-tree-sitter/tree-sitter-langs)'s
-> using git submodule. Some tree-sitter module aren't using the latest version!
+> Make sure you look into the correct repository. Some repositories are managed
+> under https://github.com/tree-sitter/[lang].
 
 ### ❓ How to create a summary parser?
 

@@ -25,8 +25,6 @@
 
 ;;; Code:
 
-(require 's)
-
 (require 'treesit-fold-util)
 
 (defcustom treesit-fold-summary-show t
@@ -105,7 +103,7 @@ type of content by checking the word boundary's existence."
 (defun treesit-fold-summary-csharp-vsdoc (doc-str)
   "Extract summary from DOC-STR in C# vsdoc."
   (let ((type-triple (string-match-p "///" doc-str)))
-    (setq doc-str (s-replace-regexp "<[/]*[^>]+." "" doc-str)) ; should use `replace-regexp-in-string'?
+    (setq doc-str (replace-regexp-in-string "<[/]*[^>]+." "" doc-str))
     (treesit-fold-summary--generic doc-str (if type-triple "///" "//"))))
 
 (defun treesit-fold-summary-csharp (doc-str)

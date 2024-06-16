@@ -217,6 +217,8 @@
   "Rule set for Elisp."
   '((macro_definition    . treesit-fold-range-elisp-function)
     (function_definition . treesit-fold-range-elisp-function)
+    (special_form   . treesit-fold-range-seq)
+    (list           . treesit-fold-range-seq)
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset ";;")))))
@@ -663,6 +665,11 @@
     (full_type_declaration       . treesit-fold-range-vhdl-type)
     (enumeration_type_definition . treesit-fold-range-seq)
     (comment                     . treesit-fold-range-lua-comment)))
+
+(defun treesit-fold-parsers-vimscript ()
+  "Rule set for Vimscript."
+  '((function_definition . treesit-fold-range-vimscript-function)
+    (if_statement        . (treesit-fold-range-seq 1 -4))))
 
 (defun treesit-fold-parsers-xml ()
   "Rule set for XML."
