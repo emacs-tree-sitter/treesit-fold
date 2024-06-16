@@ -510,10 +510,9 @@ If the current node is not folded or not foldable, do nothing."
              (treesit-fold-on-fold-hook)
              (node (treesit-buffer-root-node))
              (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
-                                   (alist-get major-mode treesit-fold-range-alist)
-                                   ))
+                                   (alist-get major-mode treesit-fold-range-alist)))
              (query (treesit-query-compile (treesit-node-language node) patterns)))
-        (setq nodes (treesit-query-capture node query nil nil t)
+        (setq nodes (treesit-query-capture node query)
               nodes (cl-remove-if (lambda (node)
                                     ;; Removed if on same line
                                     (treesit-fold--node-range-on-same-line (cdr node)))
