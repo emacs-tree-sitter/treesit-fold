@@ -26,7 +26,7 @@ the tree-sitter syntax tree.
 - [🖥 Usage](#🖥-usage)
   - [📇 Commands](#📇-commands)
   - [🔨 Supported languages](#🔨-supported-languages)
-    - [Add support for non-ts modes](#-Add support for non-ts modes)
+    - [🚀 Add support for non-ts modes](#🚀-Add support for non-ts modes)
 - [📝 Customization](#📝-customization)
   - [⚪ Folding on new nodes](#⚪-folding-on-new-nodes)
     - [❔ Example](#❔-example)
@@ -149,7 +149,7 @@ These languages are in development:
 *P.S. We don't list trivial languages here. e.g., LLVM IR (`.ll`) files, etc.
 Please see the variable `treesit-fold-range-alist` for the fully supported list!*
 
-#### Add support for non-ts modes
+#### 🚀 Add support for non-ts modes
 You can add folding support for non-ts modes (such as c-mode or emacs-lisp-mode),
 this requires you have the parser library for the mode.
 After, you can enable folding adding these code snippets to your configuration:
@@ -405,8 +405,8 @@ basic `treesit-fold-range-seq`.
 ```elisp
 (defun treesit-fold-range-seq (node offset)
   "..."
-  (let ((beg (1+ (tsc-node-start-position node)))  ; node beginning position
-        (end (1- (tsc-node-end-position node))))   ; node end position
+  (let ((beg (1+ (treesit-node-start node)))  ; node beginning position
+        (end (1- (treesit-node-end node))))   ; node end position
     (treesit-fold--cons-add (cons beg end) offset)))    ; return fold range
 ```
 
@@ -653,11 +653,12 @@ To look for the correct node you have three options:
 - look at the `tree-sitter-[lang]/grammar.js` implementation. In the above
   example, `block` node is defined in the
   [tree-sitter-c-sharp](https://github.com/tree-sitter/tree-sitter-c-sharp)'s
-  `grammar.js` file
-- open a file of your language choice in emacs and `M-x tree-sitter-debug-mode`.
-  This will display the whole s-expr representing your file
-- `(message "%S" (tsc-node-to-sexp))` in your function to display what your
-  function is seeing
+  `grammar.js` file.
+- open a file of your language choice (ensure that it has a tree-sitter parser) in emacs and `M-x treesit-explore-mode`.
+  This will display a buffer with the whole s-expr representing nodes at point from the current file/buffer.
+- `M-x treesit-inspect-node-at-point` in your function to display what your
+  function is seeing.
+- Also you can use `M-x treesit-inspect-mode` which diplay in the mode-line the current node at point.
 
 > ⚠️ Warning
 >
