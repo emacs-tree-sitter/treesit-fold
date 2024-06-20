@@ -232,7 +232,7 @@ For example, Lua, Ruby, etc."
 
 (defface treesit-fold-replacement-mouse-face
   '((t :foreground "#808080" :box (:line-width -1 :style released-button)))
-  "Face used to display the fold replacement text."
+  "Face used to when mouse hovering replacement text."
   :group 'treesit-fold)
 
 (defface treesit-fold-fringe-face
