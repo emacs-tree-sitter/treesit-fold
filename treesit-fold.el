@@ -9,7 +9,7 @@
 ;;         Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-tree-sitter/treesit-fold
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "29.1") (s "1.9.0") (fringe-helper "1.0.1"))
+;; Package-Requires: ((emacs "29.1") (fringe-helper "1.0.1"))
 ;; Keywords: convenience folding tree-sitter
 
 ;; This file is NOT part of GNU Emacs.
@@ -40,7 +40,6 @@
 (require 'seq)
 (require 'subr-x)
 
-(require 's)
 (require 'treesit)
 
 (require 'treesit-fold-util)
@@ -63,7 +62,8 @@
     (agda-mode              . ,(treesit-fold-parsers-agda))
     (arduino-mode           . ,(treesit-fold-parsers-arduino))
     (asm-mode               . ,(treesit-fold-parsers-asm))
-    (awk-ts-mode            . ,(treesit-fold-parsers-c))
+    (awk-mode               . ,(treesit-fold-parsers-awk))
+    (awk-ts-mode            . ,(treesit-fold-parsers-awk))
     (fasm-mode              . ,(treesit-fold-parsers-asm))
     (masm-mode              . ,(treesit-fold-parsers-asm))
     (nasm-mode              . ,(treesit-fold-parsers-asm))
@@ -124,6 +124,7 @@
     (julia-mode             . ,(treesit-fold-parsers-julia))
     (julia-ts-mode          . ,(treesit-fold-parsers-julia))
     (kotlin-mode            . ,(treesit-fold-parsers-kotlin))
+    (kotlin-ts-mode         . ,(treesit-fold-parsers-kotlin))
     (latex-mode             . ,(treesit-fold-parsers-latex))
     (latex-ts-mode          . ,(treesit-fold-parsers-latex))
     (LaTeX-mode             . ,(treesit-fold-parsers-latex))
@@ -141,19 +142,20 @@
     (makefile-bsdmake-mode  . ,(treesit-fold-parsers-make))
     (makefile-imake-mode    . ,(treesit-fold-parsers-make))
     (markdown-mode          . ,(treesit-fold-parsers-markdown))
+    (markdown-ts-mode       . ,(treesit-fold-parsers-markdown))
     (matlab-mode            . ,(treesit-fold-parsers-matlab))
     (mermaid-mode           . ,(treesit-fold-parsers-mermaid))
+    (mermaid-ts-mode        . ,(treesit-fold-parsers-mermaid))
     (ninja-mode             . ,(treesit-fold-parsers-ninja))
     (noir-mode              . ,(treesit-fold-parsers-noir))
+    (noir-ts-mode           . ,(treesit-fold-parsers-noir))
     (nix-mode               . ,(treesit-fold-parsers-nix))
     (nix-ts-mode            . ,(treesit-fold-parsers-nix))
     (ocaml-mode             . ,(treesit-fold-parsers-ocaml))
     (ocaml-ts-mode          . ,(treesit-fold-parsers-ocaml))
     (org-mode               . ,(treesit-fold-parsers-org))
     (pascal-mode            . ,(treesit-fold-parsers-pascal))
-    (pascal-ts-mode         . ,(treesit-fold-parsers-pascal))
     (perl-mode              . ,(treesit-fold-parsers-perl))
-    (perl-ts-mode           . ,(treesit-fold-parsers-perl))
     (php-mode               . ,(treesit-fold-parsers-php))
     (php-ts-mode            . ,(treesit-fold-parsers-php))
     (python-mode            . ,(treesit-fold-parsers-python))
@@ -167,9 +169,9 @@
     (rust-ts-mode           . ,(treesit-fold-parsers-rust))
     (rustic-mode            . ,(treesit-fold-parsers-rust))
     (scheme-mode            . ,(treesit-fold-parsers-scheme))
-    (scheme-ts-mode         . ,(treesit-fold-parsers-scheme))
     (sh-mode                . ,(treesit-fold-parsers-bash))
     (scala-mode             . ,(treesit-fold-parsers-scala))
+    (scala-ts-mode          . ,(treesit-fold-parsers-scala))
     (sql-mode               . ,(treesit-fold-parsers-sql))
     (svelte-mode            . ,(treesit-fold-parsers-svelte))
     (swift-mode             . ,(treesit-fold-parsers-swift))
@@ -179,12 +181,17 @@
     (conf-toml-mode         . ,(treesit-fold-parsers-toml))
     (tuareg-mode            . ,(treesit-fold-parsers-ocaml))
     (typescript-mode        . ,(treesit-fold-parsers-typescript))
+    (typescript-ts-mode     . ,(treesit-fold-parsers-typescript))
     (tsx-ts-mode            . ,(treesit-fold-parsers-typescript))
     (verilog-mode           . ,(treesit-fold-parsers-verilog))
+    (verilog-ts-mode        . ,(treesit-fold-parsers-verilog))
     (vhdl-mode              . ,(treesit-fold-parsers-vhdl))
+    (vhdl-ts-mode           . ,(treesit-fold-parsers-vhdl))
+    (vimscript-ts-mode      . ,(treesit-fold-parsers-vimscript))
     (nxml-mode              . ,(treesit-fold-parsers-xml))
     (xml-ts-mode            . ,(treesit-fold-parsers-xml))
     (yaml-mode              . ,(treesit-fold-parsers-yaml))
+    (yaml-ts-mode           . ,(treesit-fold-parsers-yaml))
     (k8s-mode               . ,(treesit-fold-parsers-yaml))
     (zig-mode               . ,(treesit-fold-parsers-zig)))
   "An alist of (major-mode . (foldable-node-type . function)).
@@ -399,6 +406,7 @@ This function is borrowed from `tree-sitter-node-at-point'."
                                         (treesit-fold-summary--get (buffer-substring beg end)))
                                    (propertize treesit-fold-replacement
                                                'mouse-face 'treesit-fold-replacement-mouse-face
+                                               'help-echo "mouse-1: unfold this node"
                                                'keymap map)))
       (overlay-put ov 'face 'treesit-fold-replacement-face)
       (overlay-put ov 'modification-hooks '(treesit-fold--on-change))
@@ -1458,6 +1466,18 @@ more information."
       (setq end (treesit-fold--last-eol end)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
+(defun treesit-fold-range-vimscript-function (node offset)
+  "Return the fold range for `function!' and `func' NODE
+in Vimscript.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (when-let* ((param-node (treesit-node-child node 1))
+              (beg (treesit-node-start param-node))
+              (end (treesit-node-end node)))
+    (unless treesit-fold-on-next-line  ; display nicely
+      (setq beg (treesit-fold--last-eol beg)))
+    (treesit-fold--cons-add (cons beg end) offset)))
 
 (provide 'treesit-fold)
 ;;; treesit-fold.el ends here
