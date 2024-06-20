@@ -217,8 +217,6 @@
   "Rule set for Elisp."
   '((macro_definition    . treesit-fold-range-elisp-function)
     (function_definition . treesit-fold-range-elisp-function)
-    (special_form   . treesit-fold-range-seq)
-    (list           . treesit-fold-range-seq)
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset ";;")))))
