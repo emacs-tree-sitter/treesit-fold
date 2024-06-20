@@ -134,6 +134,11 @@
                  (t
                   (treesit-fold-range-c-like-comment node offset))))))))
 
+(defun treesit-fold-parsers-awk ()
+  "Rule set for Awk."
+  ;; TODO: Complete this function
+  (append (treesit-fold-parsers-c)))
+
 (defun treesit-fold-parsers-bash ()
   "Rule set for Bash."
   '((compound_statement . treesit-fold-range-seq)
