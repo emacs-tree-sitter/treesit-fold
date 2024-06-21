@@ -586,7 +586,7 @@ For arguments NODE and NEXT, please see the function
 `treesit-fold--next-prev-node' for more information."
   (let ((iter-node (treesit-fold--next-prev-node node next)))
     (while (and iter-node
-                (equal "\n" (treesit-node-text iter-node)))
+                (equal "\n" (ignore-errors (treesit-node-text iter-node))))
       (setq iter-node (treesit-fold--next-prev-node iter-node next)))
     iter-node))
 
