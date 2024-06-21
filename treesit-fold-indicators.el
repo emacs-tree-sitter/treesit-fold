@@ -29,8 +29,6 @@
 (require 'seq)
 (require 'subr-x)
 
-(require 'fringe-helper)
-
 (require 'treesit-fold-util)
 (require 'treesit-fold)
 
@@ -63,48 +61,48 @@
   :type 'hook
   :group 'treesit-fold)
 
-(fringe-helper-define 'treesit-fold-indicators-fr-plus nil
-  "XXXXXXX"
-  "X.....X"
-  "X..X..X"
-  "X.XXX.X"
-  "X..X..X"
-  "X.....X"
-  "XXXXXXX")
+(define-fringe-bitmap 'treesit-fold-indicators-fr-plus
+  (vector #b1111111
+          #b1000001
+          #b1001001
+          #b1011101
+          #b1001001
+          #b1000001
+          #b1111111))
 
-(fringe-helper-define 'treesit-fold-indicators-fr-minus-tail nil
-  "........" "........" "........" "........" "........"
-  "........" "........" "........" "........" "........"
-  "XXXXXXX"
-  "X.....X"
-  "X.....X"
-  "X.XXX.X"
-  "X.....X"
-  "X.....X"
-  "XXXXXXX"
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX...")
+(define-fringe-bitmap 'treesit-fold-indicators-fr-minus-tail
+  (vector #b00000000 #b00000000 #b00000000 #b00000000 #b00000000
+          #b00000000 #b00000000 #b00000000 #b00000000 #b00000000
+          #b1111111
+          #b1000001
+          #b1000001
+          #b1011101
+          #b1000001
+          #b1000001
+          #b1111111
+          #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011000 #b00011000 #b00011000 #b00011000))
 
-(fringe-helper-define 'treesit-fold-indicators-fr-center nil
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XX..." "...XX...")
+(define-fringe-bitmap 'treesit-fold-indicators-fr-center
+  (vector #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011000 #b00011000))
 
-(fringe-helper-define 'treesit-fold-indicators-fr-end-left nil
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XXXXX" "...XXXXX"
-  "........" "........" "........" "........" "........"
-  "........" "........" "........" "........" "........")
+(define-fringe-bitmap 'treesit-fold-indicators-fr-end-left
+  (vector #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011111 #b00011111
+          #b00000000 #b00000000 #b00000000 #b00000000 #b00000000
+          #b00000000 #b00000000 #b00000000 #b00000000 #b00000000))
 
-(fringe-helper-define 'treesit-fold-indicators-fr-end-right nil
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "...XX..." "...XX..." "...XX..." "...XX..."
-  "...XX..." "XXXXX..." "XXXXX..."
-  "........" "........" "........" "........" "........"
-  "........" "........" "........" "........" "........")
+(define-fringe-bitmap 'treesit-fold-indicators-fr-end-right
+  (vector #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b00011000 #b00011000 #b00011000 #b00011000
+          #b00011000 #b11111000 #b11111000
+          #b00000000 #b00000000 #b00000000 #b00000000 #b00000000
+          #b00000000 #b00000000 #b00000000 #b00000000 #b00000000))
 
 ;;
 ;; (@* "Entry" )

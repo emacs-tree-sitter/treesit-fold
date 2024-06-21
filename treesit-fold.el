@@ -9,7 +9,7 @@
 ;;         Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-tree-sitter/treesit-fold
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "29.1") (fringe-helper "1.0.1"))
+;; Package-Requires: ((emacs "29.1"))
 ;; Keywords: convenience folding tree-sitter
 
 ;; This file is NOT part of GNU Emacs.
