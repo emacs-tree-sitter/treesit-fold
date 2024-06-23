@@ -264,6 +264,17 @@
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))))
 
+(defun treesit-fold-parsers-gleam ()
+  "Rules set for Gleam."
+  '((function        . treesit-fold-range-gleam)
+    (type_definition . treesit-fold-range-gleam)
+    (module_comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "////")))
+    (statement_comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "///")))))
+
 (defun treesit-fold-parsers-glsl ()
   "Rule set for GLSL."
   '((field_declaration_list . treesit-fold-range-seq)

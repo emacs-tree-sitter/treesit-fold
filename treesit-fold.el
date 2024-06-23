@@ -96,6 +96,7 @@
     (fish-mode              . ,(treesit-fold-parsers-fish))
     (gdscript-mode          . ,(treesit-fold-parsers-gdscript))
     (gdscript-ts-mode       . ,(treesit-fold-parsers-gdscript))
+    (gleam-ts-mode          . ,(treesit-fold-parsers-gleam))
     (glsl-mode              . ,(treesit-fold-parsers-glsl))
     (go-mode                . ,(treesit-fold-parsers-go))
     (go-ts-mode             . ,(treesit-fold-parsers-go))
@@ -876,6 +877,18 @@ For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
   (when-let* ((beg (treesit-node-start node))
               (beg (treesit-fold--eol beg))
+              (end (treesit-node-end node))
+              (end (1- end)))
+    (treesit-fold--cons-add (cons beg end) offset)))
+
+(defun treesit-fold-range-gleam (node offset)
+  "Return the fold range for `function' `type_definition' NODE in Gleam.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (when-let* ((open-bracket (car (treesit-fold-find-children node "{")))
+              (beg (treesit-node-start open-bracket))
+              (beg (1+ beg))
               (end (treesit-node-end node))
               (end (1- end)))
     (treesit-fold--cons-add (cons beg end) offset)))
