@@ -654,8 +654,10 @@ more information.
 Argument PREFIX is the comment prefix in string."
   (save-excursion
     (when-let* ((treesit-fold-line-comment-mode)  ; XXX: Check enabled!?
-                (first-node (treesit-fold--continuous-node-prefix node prefix nil))
-                (last-node (treesit-fold--continuous-node-prefix node prefix t))
+                (first-node (ignore-errors
+                              (treesit-fold--continuous-node-prefix node prefix nil)))
+                (last-node (ignore-errors
+                             (treesit-fold--continuous-node-prefix node prefix t)))
                 (prefix-len (length prefix))
                 (beg (+ (treesit-node-start first-node) prefix-len))
                 (end (treesit-node-end last-node)))
