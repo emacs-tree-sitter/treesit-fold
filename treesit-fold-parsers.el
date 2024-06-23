@@ -266,8 +266,11 @@
 
 (defun treesit-fold-parsers-gleam ()
   "Rules set for Gleam."
-  '((function        . treesit-fold-range-gleam)
-    (type_definition . treesit-fold-range-gleam)
+  '((function           . treesit-fold-range-gleam)
+    (type_definition    . treesit-fold-range-gleam)
+    (anonymous_function . treesit-fold-range-gleam)
+    (block              . treesit-fold-range-gleam)
+    (list               . treesit-fold-range-seq)
     (module_comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "////")))
