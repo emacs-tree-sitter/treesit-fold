@@ -292,9 +292,10 @@ For example, Lua, Ruby, etc."
 
 (defun treesit-fold--trigger ()
   "Toggle `treesit-fold-mode' when the current mode is treesit-fold compatible."
-  (if (and (treesit-fold-ready-p) (treesit-fold-usable-mode-p))
-      (treesit-fold-mode 1)
-    (treesit-fold-mode -1)))
+  (when (treesit-fold-ready-p)
+    (if (treesit-fold-usable-mode-p)
+        (treesit-fold-mode 1)
+      (treesit-fold-mode -1))))
 
 ;;;###autoload
 (define-minor-mode treesit-fold-mode
