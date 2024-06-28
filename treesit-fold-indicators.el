@@ -353,7 +353,8 @@ Optional arguments WEND and WSTART are the range for caching."
           (wstart (window-start))
           (nodes-to-fold
            (cl-remove-if-not (lambda (node)
-                               (treesit-fold-indicators--within-window (cdr node) wend wstart))
+                               (ignore-errors
+                                 (treesit-fold-indicators--within-window (cdr node) wend wstart)))
                              nodes-to-fold))
           (mode-ranges (alist-get major-mode treesit-fold-range-alist))
           (nodes-to-fold
