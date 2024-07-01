@@ -502,10 +502,6 @@ turn off `treesit-fold-mode`
         (lambda (&rest _)
           (null (treesit-fold--overlays-in treesit-fold-indicators-window (selected-window)
                                       (line-beginning-position) (line-end-position)))))
-
-  (advice-add 'line-reminder-transfer-to-saved-lines :after
-              ;; Refresh indicators for package `treesit-fold'.
-              #'treesit-fold-indicators-refresh)
   ```
 
 ### 📝 Summary

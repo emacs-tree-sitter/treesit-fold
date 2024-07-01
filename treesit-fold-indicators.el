@@ -119,8 +119,9 @@
   "Enable `treesit-fold-indicators' mode."
   (if (or treesit-fold-mode (treesit-fold-mode 1))  ; Enable `treesit-fold-mode' automatically
       (progn
-        (add-hook 'after-change-functions #'treesit-fold-indicators-refresh nil t)
-        (add-hook 'after-save-hook #'treesit-fold-indicators-refresh nil t)
+        (add-hook 'after-change-functions #'treesit-fold-indicators--trigger-render nil t)
+        (add-hook 'after-save-hook #'treesit-fold-indicators--trigger-render nil t)
+        (add-hook 'post-command-hook #'treesit-fold-indicators--post-command nil t)
         (add-hook 'window-size-change-functions #'treesit-fold-indicators--size-change)
         (add-hook 'window-scroll-functions #'treesit-fold-indicators--scroll)
         (treesit-fold-indicators--render-buffer))
@@ -128,8 +129,9 @@
 
 (defun treesit-fold-indicators--disable ()
   "Disable `treesit-fold-indicators' mode."
-  (remove-hook 'after-change-functions #'treesit-fold-indicators-refresh t)
-  (remove-hook 'after-save-hook #'treesit-fold-indicators-refresh t)
+  (remove-hook 'after-change-functions #'treesit-fold-indicators--trigger-render t)
+  (remove-hook 'after-save-hook #'treesit-fold-indicators--trigger-render t)
+  (remove-hook 'post-command-hook #'treesit-fold-indicators--post-command t)
   (remove-hook 'window-size-change-functions #'treesit-fold-indicators--size-change)
   (remove-hook 'window-scroll-functions #'treesit-fold-indicators--scroll)
   (treesit-fold-indicators--remove-ovs-buffer))
@@ -289,6 +291,9 @@ Argument FOLDED holds folding state; it's a boolean."
 ;; (@* "Update" )
 ;;
 
+(defvar-local treesit-fold-indicators--render-this-command-p nil
+  "Set to non-nil if render current command.")
+
 (defun treesit-fold-indicators--create (node)
   "Create indicators using NODE."
   (when-let* ((range (treesit-fold--get-fold-range node))
@@ -316,14 +321,22 @@ Argument FOLDED holds folding state; it's a boolean."
   (treesit-fold--with-selected-window window
     (ignore-errors (treesit-fold-indicators-refresh))))
 
-(defun treesit-fold-indicators--within-window (node &optional wend wstart)
+(defun treesit-fold-indicators--trigger-render (&rest _)
+  "Trigger rendering on the next redisplay."
+  (setq treesit-fold-indicators--render-this-command-p t))  ; Trigger render at the end.
+
+(defun treesit-fold-indicators--post-command ()
+  "Post command."
+  (when treesit-fold-indicators--render-this-command-p
+    (treesit-fold-indicators-refresh)
+    (setq treesit-fold-indicators--render-this-command-p nil)))
+
+(defun treesit-fold-indicators--within-window (node wend wstart)
   "Return nil if NODE is not within the current window display range.
 
-Optional arguments WEND and WSTART are the range for caching."
+Arguments WEND and WSTART are the range for caching."
   (when-let*
-      ((wend (or wend (window-end nil t)))
-       (wstart (or wstart (window-start)))
-       (range (cl-case treesit-fold-indicators-render-method
+      ((range (cl-case treesit-fold-indicators-render-method
                 (`full
                  (ignore-errors (treesit-fold--get-fold-range node)))
                 (`partial (cons (treesit-node-start node)
@@ -342,30 +355,30 @@ Optional arguments WEND and WSTART are the range for caching."
   "Refresh indicators for all folding range."
   (when (and (ignore-errors (treesit-buffer-root-node)) treesit-fold-indicators-mode)
     (treesit-fold--ensure-ts
-     (when-let*
-         ((node (ignore-errors (treesit-buffer-root-node)))
-          (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
-                                (alist-get major-mode treesit-fold-range-alist)))
-          (query (ignore-errors
-                   (treesit-query-compile (treesit-node-language node) patterns)))
-          (nodes-to-fold (treesit-query-capture node query))
-          (wend (window-end nil t))
-          (wstart (window-start))
-          (nodes-to-fold
-           (cl-remove-if-not (lambda (node)
-                               (ignore-errors
-                                 (treesit-fold-indicators--within-window (cdr node) wend wstart)))
-                             nodes-to-fold))
-          (mode-ranges (alist-get major-mode treesit-fold-range-alist))
-          (nodes-to-fold
-           (cl-remove-if (lambda (node)
-                           (treesit-fold--non-foldable-node-p (cdr node) mode-ranges))
-                         nodes-to-fold)))
-       (treesit-fold-indicators--remove-ovs)
-       (thread-last nodes-to-fold
-                    (mapcar #'cdr)
-                    (mapc #'treesit-fold-indicators--create))
-       (run-hooks 'treesit-fold-indicators-refresh-hook)))))
+      (when-let*
+          ((node (ignore-errors (treesit-buffer-root-node)))
+           (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
+                                 (alist-get major-mode treesit-fold-range-alist)))
+           (query (ignore-errors
+                    (treesit-query-compile (treesit-node-language node) patterns)))
+           (nodes-to-fold (treesit-query-capture node query))
+           (wend (window-end nil t))
+           (wstart (window-start))
+           (nodes-to-fold
+            (cl-remove-if-not (lambda (node)
+                                (ignore-errors
+                                  (treesit-fold-indicators--within-window (cdr node) wend wstart)))
+                              nodes-to-fold))
+           (mode-ranges (alist-get major-mode treesit-fold-range-alist))
+           (nodes-to-fold
+            (cl-remove-if (lambda (node)
+                            (treesit-fold--non-foldable-node-p (cdr node) mode-ranges))
+                          nodes-to-fold)))
+        (treesit-fold-indicators--remove-ovs)
+        (thread-last nodes-to-fold
+                     (mapcar #'cdr)
+                     (mapc #'treesit-fold-indicators--create))
+        (run-hooks 'treesit-fold-indicators-refresh-hook)))))
 
 (defun treesit-fold-indicators--remove-ovs (&optional window)
   "Remove all indicators overlays in this WINDOW."
