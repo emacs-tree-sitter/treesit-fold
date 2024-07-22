@@ -656,7 +656,7 @@ To look for the correct node you have three options:
   function is seeing.
 - use `M-x treesit-inspect-mode` which diplay in the mode-line the current node at point.
 
-> ⚠️ Warning
+> [!WARNING]
 >
 > Make sure you look into the correct repository. Some repositories are managed
 > under https://github.com/tree-sitter/[lang].
