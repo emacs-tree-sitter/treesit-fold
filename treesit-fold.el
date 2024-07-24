@@ -463,7 +463,9 @@ Return nil otherwise."
   "Run BODY only if `tree-sitter-mode` is enabled."
   (declare (indent 0))
   `(if (treesit-fold-ready-p)
-       (progn ,@body)
+       (save-excursion
+         (back-to-indentation)
+         (progn ,@body))
      (user-error "Ignored, no tree-sitter parser in current buffer")))
 
 ;;;###autoload
