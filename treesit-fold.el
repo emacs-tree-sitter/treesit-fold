@@ -1153,6 +1153,8 @@ more information."
     (treesit-fold--cons-add (cons beg end) offset)))
 
 (defun treesit-fold-markdown-next-heading (node siblings)
+  "Return first heading from SIBLINGS with start point after NODE.
+If there is no sibling, then return nil."
   (or
    (seq-find
     (lambda (n)
