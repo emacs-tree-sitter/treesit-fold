@@ -583,6 +583,8 @@ If the current syntax node is not foldable, do nothing."
       (treesit-fold-close))))
 
 (defun treesit-fold--node-cycle-state (&optional node)
+  "Return the cycle state of current heading.
+Return either hide-all, headings-only, or show-all."
   (let (nodes)
     (let* ((treesit-fold-indicators-mode)
            (treesit-fold-on-fold-hook)
