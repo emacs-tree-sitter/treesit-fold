@@ -293,7 +293,7 @@ For example, Lua, Ruby, etc."
   (treesit-parser-list))
 
 (defun treesit-fold--trigger ()
-  "Toggle `treesit-fold-mode' when the current mode is treesit-fold compatible."
+  "Enable `treesit-fold-mode' when the current mode is treesit-fold compatible."
   (when (and (treesit-fold-ready-p)
              (treesit-fold-usable-mode-p))
     (treesit-fold-mode 1)))

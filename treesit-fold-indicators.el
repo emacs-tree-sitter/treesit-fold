@@ -156,9 +156,11 @@
   :group 'treesit-fold)
 
 (defun treesit-fold-indicators--trigger ()
+  "Enable `treesit-fold-indicators-mode' when `treesit-fold-mode' can
+be enabled."
   (when (or treesit-fold-mode
             (treesit-fold-mode 1))
-    (treesit-fold-indicators-mode)))
+    (treesit-fold-indicators-mode 1)))
 ;;
 ;; (@* "Events" )
 ;;
