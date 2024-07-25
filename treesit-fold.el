@@ -1153,7 +1153,7 @@ more information."
               (end (treesit-node-end last-child)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
-(defun treesit-fold-markdown-next-heading (node siblings)
+(defun treesit-fold-range-markdown-next-heading (node siblings)
   "Return first heading from SIBLINGS with start point after NODE.
 If there is no sibling, then return nil."
   (or
@@ -1165,7 +1165,7 @@ If there is no sibling, then return nil."
     (remove node siblings))
    (treesit-node-next-sibling (treesit-node-parent node) t)))
 
-(defun treesit-fold-markdown-heading (node offset)
+(defun treesit-fold-range-markdown-heading (node offset)
   "Define fold range for Markdown headings.
 
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
@@ -1177,12 +1177,12 @@ more information."
        (siblings (treesit-fold-find-children parent "section"))
        (end (1-
              (or (treesit-node-start
-                  (treesit-fold-markdown-next-heading node siblings))
+                  (treesit-fold-range-markdown-next-heading node siblings))
                  (point-max))))
        (name (length (string-trim (or (treesit-node-text head) "")))))
-    (treesit-fold--cons-add (cons beg end) (cons name 0))))
+    (treesit-fold--cons-add (cons beg end) (cons name 0) offset)))
 
-(defun treesit-fold-markdown-code-block (node offset)
+(defun treesit-fold-range-markdown-code-block (node offset)
   "Define fold range for Markdown code blocks.
 
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
@@ -1192,7 +1192,16 @@ more information."
          (name (+ 2 (length
                      (or (treesit-node-text (treesit-node-child node 1))
                          "")))))
-    (treesit-fold--cons-add (cons beg end) (cons name -2))))
+    (treesit-fold--cons-add (cons beg end) (cons name -2) offset)))
+
+(defun treesit-fold-range-markdown-html-block (node offset)
+  "Define fold range for Markdown `html_block'.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (let* ((beg (+ (treesit-node-start node) 2))
+         (end (- (treesit-node-end node) 3)))
+    (treesit-fold--cons-add (cons beg end) offset)))
 
 (defun treesit-fold-range-matlab-blocks (node offset)
   "Define fold range for MATLAB blocks.

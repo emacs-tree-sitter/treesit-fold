@@ -72,8 +72,9 @@
 (declare-function treesit-fold-range-lua-do-loop "treesit-fold.el")
 (declare-function treesit-fold-range-lua-repeat "treesit-fold.el")
 (declare-function treesit-fold-range-make-recipe "treesit-fold.el")
-(declare-function treesit-fold-markdown-heading "treesit-fold.el")
-(declare-function treesit-fold-markdown-code-block "treesit-fold.el")
+(declare-function treesit-fold-range-markdown-heading "treesit-fold.el")
+(declare-function treesit-fold-range-markdown-code-block "treesit-fold.el")
+(declare-function treesit-fold-range-markdown-html-block "treesit-fold.el")
 (declare-function treesit-fold-range-matlab-function "treesit-fold.el")
 (declare-function treesit-fold-range-matlab-statements "treesit-fold.el")
 (declare-function treesit-fold-range-matlab-blocks "treesit-fold.el")
@@ -452,9 +453,9 @@
 
 (defun treesit-fold-parsers-markdown ()
   "Rule set for Markdown."
-  '((fenced_code_block . treesit-fold-markdown-code-block)
-    (section . treesit-fold-markdown-heading)
-    (html_block        . treesit-fold-range-html)))
+  '((fenced_code_block . treesit-fold-range-markdown-code-block)
+    (section           . treesit-fold-range-markdown-heading)
+    (html_block        . treesit-fold-range-markdown-html-block)))
 
 (defun treesit-fold-parsers-matlab ()
   "Rule set for MATLAB."
