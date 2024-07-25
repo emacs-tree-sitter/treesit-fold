@@ -143,6 +143,18 @@ Optional argument TRIM, see function `treesit-fold--get-face'."
   (goto-char pos)
   (current-indentation))
 
+(defun treesit-fold--node-start-position (node)
+  "Return NODE's start position."
+  (save-excursion
+    (goto-char (treesit-node-start node))
+    (cons (line-number-at-pos) (current-column))))
+
+(defun treesit-fold--node-end-position (node)
+  "Return NODE's end position."
+  (save-excursion
+    (goto-char (treesit-node-end node))
+    (cons (line-number-at-pos) (current-column))))
+
 ;;
 ;; (@* "Math" )
 ;;
