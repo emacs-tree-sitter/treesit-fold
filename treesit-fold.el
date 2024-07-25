@@ -252,6 +252,8 @@ For example, Lua, Ruby, etc."
   "Modes in which `treesit-fold-mode' gets enabled."
   :type '(repeat symbol))
 
+(defvar-keymap treesit-fold-mode-map
+  :doc "Keymap used when `treesit-fold-mode' is active.")
 ;;
 ;; (@* "Externals" )
 ;;
@@ -291,11 +293,10 @@ For example, Lua, Ruby, etc."
   (treesit-parser-list))
 
 (defun treesit-fold--trigger ()
-  "Toggle `treesit-fold-mode' when the current mode is treesit-fold compatible."
-  (when (treesit-fold-ready-p)
-    (if (treesit-fold-usable-mode-p)
-        (treesit-fold-mode 1)
-      (treesit-fold-mode -1))))
+  "Enable `treesit-fold-mode' when the current mode is treesit-fold compatible."
+  (when (and (treesit-fold-ready-p)
+             (treesit-fold-usable-mode-p))
+    (treesit-fold-mode 1)))
 
 ;;;###autoload
 (define-minor-mode treesit-fold-mode
@@ -303,25 +304,22 @@ For example, Lua, Ruby, etc."
   :group 'treesit-fold
   :init-value nil
   :lighter "Treesit-Fold"
-  (if treesit-fold-mode (treesit-fold--enable) (treesit-fold--disable)))
+  :keymap treesit-fold-mode-map
+  (cond
+   ((not (and (treesit-available-p)
+              (treesit-parser-list)
+              (treesit-fold-usable-mode-p)))
+    (when treesit-fold-mode
+      (treesit-fold-mode -1)))
+   (treesit-fold-mode
+    (treesit-fold--enable) t)
+   (t
+    (treesit-fold--disable))))
 
 ;;;###autoload
-(define-minor-mode global-treesit-fold-mode
-  "Use `treesit-fold-mode' wherever possible."
-  :group 'treesit-fold
-  :init-value nil
-  :lighter nil
-  :global t
-  (if global-treesit-fold-mode
-      (progn
-        (dolist (hook (mapcar (lambda (m) (intern (format "%s-hook" m))) treesit-fold-modes))
-          (add-hook hook #'treesit-fold--trigger))
-        ;; try to turn on in all buffers.
-        (dolist (buf (buffer-list))
-          (with-current-buffer buf
-            (treesit-fold--trigger))))
-    (dolist (hook (mapcar (lambda (m) (intern (format "%s-hook" m))) treesit-fold-modes))
-      (remove-hook hook #'treesit-fold--trigger))))
+(define-globalized-minor-mode global-treesit-fold-mode
+  treesit-fold-mode treesit-fold--trigger
+  :group 'treesit-fold)
 
 (defun treesit-fold-usable-mode-p (&optional mode)
   "Return non-nil if `treesit-fold' has defined folds for MODE."

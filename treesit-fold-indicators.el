@@ -117,15 +117,12 @@
 
 (defun treesit-fold-indicators--enable ()
   "Enable `treesit-fold-indicators' mode."
-  (if (or treesit-fold-mode (treesit-fold-mode 1))  ; Enable `treesit-fold-mode' automatically
-      (progn
-        (add-hook 'after-change-functions #'treesit-fold-indicators--trigger-render nil t)
-        (add-hook 'after-save-hook #'treesit-fold-indicators--trigger-render nil t)
-        (add-hook 'post-command-hook #'treesit-fold-indicators--post-command nil t)
-        (add-hook 'window-size-change-functions #'treesit-fold-indicators--size-change)
-        (add-hook 'window-scroll-functions #'treesit-fold-indicators--scroll)
-        (treesit-fold-indicators--render-buffer))
-    (treesit-fold-indicators-mode -1)))
+  (add-hook 'after-change-functions #'treesit-fold-indicators--trigger-render nil t)
+  (add-hook 'after-save-hook #'treesit-fold-indicators--trigger-render nil t)
+  (add-hook 'post-command-hook #'treesit-fold-indicators--post-command nil t)
+  (add-hook 'window-size-change-functions #'treesit-fold-indicators--size-change)
+  (add-hook 'window-scroll-functions #'treesit-fold-indicators--scroll)
+  (treesit-fold-indicators--render-buffer))
 
 (defun treesit-fold-indicators--disable ()
   "Disable `treesit-fold-indicators' mode."
@@ -143,31 +140,27 @@
   :lighter nil
   :keymap treesit-fold-indicators-mode-map
   :init-value nil
-  (if treesit-fold-indicators-mode
-      (treesit-fold-indicators--enable)
-    (treesit-fold-indicators--disable)))
+  (cond
+   ((not (and (or treesit-fold-mode (treesit-fold-mode 1))
+              treesit-fold-indicators-mode))
+    (when treesit-fold-indicators-mode
+      (treesit-fold-indicators-mode -1)))
+   (treesit-fold-indicators-mode
+    (treesit-fold-indicators--enable) t)
+   (t
+    (treesit-fold-indicators--disable))))
 
 ;;;###autoload
-(define-minor-mode global-treesit-fold-indicators-mode
-  "Toggle treesit-fold-indicatos in all buffers avaliable."
-  :group 'treesit-fold
-  :lighter nil
-  :init-value nil
-  :global t
-  (cond (global-treesit-fold-indicators-mode
-         (add-hook 'treesit-fold-mode-hook #'treesit-fold-indicators-mode)
-         (global-treesit-fold-mode 1)  ; Must enabled!
-         (dolist (buf (buffer-list))
-           (with-current-buffer buf
-             (when (and treesit-fold-mode (not treesit-fold-indicators-mode))
-               (treesit-fold-indicators-mode 1)))))
-        (t
-         (remove-hook 'treesit-fold-mode-hook #'treesit-fold-indicators-mode)
-         (dolist (buf (buffer-list))
-           (with-current-buffer buf
-             (when (and treesit-fold-mode treesit-fold-indicators-mode)
-               (treesit-fold-indicators-mode -1)))))))
+(define-globalized-minor-mode global-treesit-fold-indicators-mode
+  treesit-fold-indicators-mode treesit-fold-indicators--trigger
+  :group 'treesit-fold)
 
+(defun treesit-fold-indicators--trigger ()
+  "Enable `treesit-fold-indicators-mode' when `treesit-fold-mode' can
+be enabled."
+  (when (or treesit-fold-mode
+            (treesit-fold-mode 1))
+    (treesit-fold-indicators-mode 1)))
 ;;
 ;; (@* "Events" )
 ;;
