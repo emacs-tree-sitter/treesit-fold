@@ -62,9 +62,13 @@ Like function `s-count-matches' but faster."
 ;; (@* "Cons" )
 ;;
 
-(defun treesit-fold--cons-add (c1 c2)
-  "Addition for two cons C1 and C2."
-  (cons (+ (car c1) (car c2)) (+ (cdr c1) (cdr c2))))
+(defun treesit-fold--cons-add (&rest args)
+  "Addition for list of cons ARGS."
+  (let ((v1 0) (v2 0))
+    (dolist (c args)
+      (setq v1 (+ v1 (car c))
+            v2 (+ v2 (cdr c))))
+    (cons v1 v2)))
 
 ;;
 ;; (@* "Overlay" )
@@ -84,13 +88,13 @@ Like function `s-count-matches' but faster."
 ;;
 
 (defvar treesit-fold--doc-faces
-  '(font-lock-doc-face
-    font-lock-comment-face
-    font-lock-comment-delimiter-face
-    tree-sitter-hl-face:comment
-    tree-sitter-hl-face:doc
-    hl-todo
-    rst-comment)
+  '( font-lock-doc-face
+     font-lock-comment-face
+     font-lock-comment-delimiter-face
+     tree-sitter-hl-face:comment
+     tree-sitter-hl-face:doc
+     hl-todo
+     rst-comment)
   "List of face that apply for document string.")
 
 (defun treesit-fold--get-face (obj trim)

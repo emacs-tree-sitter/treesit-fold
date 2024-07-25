@@ -157,8 +157,8 @@ type of content by checking the word boundary's existence."
 (defun treesit-fold-summary-c-macro (doc-str)
   "Parse C macro summary from DOC-STR."
   (when (treesit-fold--is-face doc-str
-                               '(font-lock-preprocessor-face
-                                 preproc-font-lock-preprocessor-background))
+                               '( font-lock-preprocessor-face
+                                  preproc-font-lock-preprocessor-background))
     (treesit-fold-summary--doc-extract doc-str "")))
 
 (defun treesit-fold-summary-c (doc-str)
