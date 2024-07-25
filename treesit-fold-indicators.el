@@ -156,7 +156,7 @@
   :group 'treesit-fold)
 
 (defun treesit-fold-indicators--trigger ()
-  "Enable `treesit-fold-indicators-mode' when `treesit-fold-mode' can
+  "Enable `treesit-fold-indicators-mode' when the `treesit-fold-mode' can
 be enabled."
   (when (or treesit-fold-mode
             (treesit-fold-mode 1))

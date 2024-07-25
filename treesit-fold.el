@@ -1151,34 +1151,16 @@ more information."
               (end (treesit-node-end last-child)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
-(defun treesit-fold-range-markdown-next-heading (node siblings)
-  "Return first heading from SIBLINGS with start point after NODE.
-If there is no sibling, then return nil."
-  (or
-   (seq-find
-    (lambda (n)
-      (when-let ((child (treesit-node-child n 0 t)))
-        (and (> (treesit-node-start child) (treesit-node-start node))
-             (treesit-fold--compare-type child "atx_heading"))))
-    (remove node siblings))
-   (treesit-node-next-sibling (treesit-node-parent node) t)))
-
 (defun treesit-fold-range-markdown-heading (node offset)
   "Define fold range for Markdown headings.
 
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
-  (when-let*
-      ((parent (treesit-node-parent node))
-       (head (treesit-node-child node 0 t))
-       (beg  (treesit-node-start node))
-       (siblings (treesit-fold-find-children parent "section"))
-       (end (1-
-             (or (treesit-node-start
-                  (treesit-fold-range-markdown-next-heading node siblings))
-                 (point-max))))
-       (name (length (string-trim (or (treesit-node-text head) "")))))
-    (treesit-fold--cons-add (cons beg end) (cons name 0) offset)))
+  (when-let* ((text (treesit-node-text node))
+              ((string-prefix-p "#" text))
+              (beg  (treesit-node-start node))
+              (end  (treesit-node-end node)))
+    (treesit-fold--cons-add (cons beg end) offset)))
 
 (defun treesit-fold-range-markdown-code-block (node offset)
   "Define fold range for Markdown code blocks.
