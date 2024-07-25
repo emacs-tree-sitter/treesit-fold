@@ -1162,7 +1162,7 @@ If there is no sibling, then return nil."
         (and (> (treesit-node-start child) (treesit-node-start node))
              (treesit-fold--compare-type child "atx_heading"))))
     (remove node siblings))
-   (treesit-node-get (treesit-node-parent node) '((sibling 1 t)))))
+   (treesit-node-next-sibling (treesit-node-parent node) t)))
 
 (defun treesit-fold-markdown-heading (node offset)
   "Define fold range for Markdown headings.
