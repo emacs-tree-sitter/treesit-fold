@@ -511,7 +511,9 @@
     (list_expression    . treesit-fold-range-seq)
     (comment
      . (lambda (node offset)
-         (treesit-fold-range-line-comment node offset "#")))))
+         (if (string-prefix-p "#" (treesit-node-text node))
+             (treesit-fold-range-line-comment node offset "#")
+           (treesit-fold-range-c-like-comment node offset))))))
 
 (defun treesit-fold-parsers-ocaml ()
   "Rule set for OCaml."
