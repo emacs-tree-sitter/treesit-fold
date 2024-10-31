@@ -223,6 +223,7 @@ type of content by checking the word boundary's existence."
     (jenkinsfile-mode       . treesit-fold-summary-javadoc)
     (haskell-mode           . treesit-fold-summary-lua-doc)
     (haxe-mode              . treesit-fold-summary-javadoc)
+    (heex-mode              . treesit-fold-summary-xml)
     (hlsl-mode              . treesit-fold-summary-c)
     (html-mode              . treesit-fold-summary-xml)
     (jai-mode               . treesit-fold-summary-c)
