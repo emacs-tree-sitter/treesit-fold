@@ -106,6 +106,8 @@
     (haskell-mode           . ,(treesit-fold-parsers-haskell))
     (haskell-ts-mode        . ,(treesit-fold-parsers-haskell))
     (haxe-mode              . ,(treesit-fold-parsers-haxe))
+    (heex-mode              . ,(treesit-fold-parsers-heex))
+    (heex-ts-mode           . ,(treesit-fold-parsers-heex))
     (hlsl-mode              . ,(treesit-fold-parsers-hlsl))
     (hlsl-ts-mode           . ,(treesit-fold-parsers-hlsl))
     (html-mode              . ,(treesit-fold-parsers-html))
