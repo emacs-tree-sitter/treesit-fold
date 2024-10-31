@@ -316,9 +316,9 @@
 
 (defun treesit-fold-parsers-heex ()
   "Rule set for Heex."
-  '((tag . treesit-fold-range-html)
+  '((tag       . treesit-fold-range-html)
     (component . treesit-fold-range-html)
-    (comment . (treesit-fold-range-seq 1 -1))))
+    (comment   . (treesit-fold-range-seq 1 -1))))
 
 (defun treesit-fold-parsers-hlsl ()
   "Rule set for HLSL."
