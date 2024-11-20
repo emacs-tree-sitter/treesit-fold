@@ -25,6 +25,8 @@
 
 ;;; Code:
 
+(require 'mule-util)
+
 (require 'treesit-fold-util)
 
 (defcustom treesit-fold-summary-show t
@@ -38,6 +40,15 @@
                  (integer :tag "positive integer number"))
   :group 'treesit-fold)
 
+(defcustom treesit-fold-summary-format " <S> %s "
+  "Prefix string added before summary overlay."
+  :type 'string
+  :group 'treesit-fold)
+
+;;
+;; (@* "Obsolete" )
+;;
+
 (defcustom treesit-fold-summary-exceeded-string "..."
   "String that added after display summary.
 This happens only when summary length is larger than variable
@@ -45,10 +56,11 @@ This happens only when summary length is larger than variable
   :type 'string
   :group 'treesit-fold)
 
-(defcustom treesit-fold-summary-format " <S> %s "
-  "Prefix string added before summary overlay."
-  :type 'string
-  :group 'treesit-fold)
+(define-obsolete-variable-alias
+  'treesit-fold-summary-exceeded-string
+  'truncate-string-ellipsis
+  "treesit-fold 0.4.0"
+  "Use built-in variable instead.")
 
 ;;
 ;; (@* "Externals" )
@@ -288,11 +300,12 @@ type of content by checking the word boundary's existence."
 
 (defun treesit-fold-summary--keep-length (summary)
   "Keep the SUMMARY length to `treesit-fold-summary-max-length'."
-  (let ((len-sum (length summary))
-        (len-exc (length treesit-fold-summary-exceeded-string)))
+  (let ((len-sum (length summary)))
     (when (< treesit-fold-summary-max-length len-sum)
-      (setq summary (substring summary 0 (- treesit-fold-summary-max-length len-exc))
-            summary (concat summary treesit-fold-summary-exceeded-string))))
+      (setq summary (truncate-string-to-width summary
+                                              treesit-fold-summary-max-length
+                                              0 nil
+                                              t))))
   summary)
 
 (defun treesit-fold-summary--apply-format (summary)

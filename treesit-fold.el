@@ -540,7 +540,7 @@ If the current node is not folded or not foldable, do nothing."
   "Unfold all syntax nodes in the buffer."
   (interactive)
   (treesit-fold--ensure-ts
-    (when-let ((nodes (treesit-fold--overlays-in 'invisible 'treesit-fold)))
+    (when-let* ((nodes (treesit-fold--overlays-in 'invisible 'treesit-fold)))
       (mapc #'delete-overlay nodes)
       (run-hooks 'treesit-fold-on-fold-hook)
       t)))
@@ -637,14 +637,14 @@ START-SEQ and LAST-SEQ can be named tree-sitter nodes or anonomous nodes.
 If no occurence is found for START-SEQ or END-SEQ or the
 occurences overlap, then the range returned is nil."
   (when start-seq
-    (when-let ((beg-node (car (treesit-fold-find-children node start-seq)))
-               (end-node (if end-seq
-                             (car (last (treesit-fold-find-children node end-seq)))
-                           node))
-               (beg (treesit-node-end beg-node))
-               (end (if end-seq
-                        (treesit-node-start end-node)
-                      (1- (treesit-node-end node)))))
+    (when-let* ((beg-node (car (treesit-fold-find-children node start-seq)))
+                (end-node (if end-seq
+                              (car (last (treesit-fold-find-children node end-seq)))
+                            node))
+                (beg (treesit-node-end beg-node))
+                (end (if end-seq
+                         (treesit-node-start end-node)
+                       (1- (treesit-node-end node)))))
       (unless (> beg end) (treesit-fold--cons-add (cons beg end) offset)))))
 
 (defun treesit-fold-range-line-comment (node offset prefix)
@@ -1407,9 +1407,9 @@ more information."
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
   (when-let* ((beg (treesit-node-start node))
-              (end (cond ((when-let ((next (treesit-node-next-sibling node)))
+              (end (cond ((when-let* ((next (treesit-node-next-sibling node)))
                             (treesit-node-start next)))
-                         ((when-let ((parent (treesit-fold-find-parent node "if")))
+                         ((when-let* ((parent (treesit-fold-find-parent node "if")))
                             (- (treesit-node-end parent) 3))))))
     (when treesit-fold-on-next-line  ; display nicely
       (setq end (treesit-fold--last-eol end)))
