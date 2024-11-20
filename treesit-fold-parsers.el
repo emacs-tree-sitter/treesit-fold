@@ -87,6 +87,7 @@
 (declare-function treesit-fold-range-org-body "treesit-fold.el")
 (declare-function treesit-fold-range-clojure-function "treesit-fold.el")
 (declare-function treesit-fold-range-cmake-body "treesit-fold.el")
+(declare-function treesit-fold-range-editorconfig-section "treesit-fold.el")
 (declare-function treesit-fold-range-pascal-comment "treesit-fold.el")
 (declare-function treesit-fold-range-python-def "treesit-fold.el")
 (declare-function treesit-fold-range-python-expression-statement "treesit-fold.el")
@@ -220,6 +221,15 @@
     (comment               . treesit-fold-range-c-like-comment)
     (documentation_comment . treesit-fold-range-c-like-comment)
     (list_literal          . treesit-fold-range-seq)))  ; array
+
+(defun treesit-fold-parsers-editorconfig ()
+  "Rule set for EditorConfig."
+  '((section . treesit-fold-range-editorconfig-section)
+    (comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node
+                                          (treesit-fold--cons-add offset '(0 . -1))
+                                          "#")))))
 
 (defun treesit-fold-parsers-elisp ()
   "Rule set for Elisp."

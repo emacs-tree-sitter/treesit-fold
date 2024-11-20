@@ -64,6 +64,7 @@
     (asm-mode               . ,(treesit-fold-parsers-asm))
     (awk-mode               . ,(treesit-fold-parsers-awk))
     (awk-ts-mode            . ,(treesit-fold-parsers-awk))
+    (editorconfig-conf-mode . ,(treesit-fold-parsers-editorconfig))
     (fasm-mode              . ,(treesit-fold-parsers-asm))
     (masm-mode              . ,(treesit-fold-parsers-asm))
     (nasm-mode              . ,(treesit-fold-parsers-asm))
@@ -792,6 +793,26 @@ more information."
               (end (treesit-node-end node)))
     (when treesit-fold-on-next-line  ; display nicely
       (setq end (treesit-fold--last-eol end)))
+    (treesit-fold--cons-add (cons beg end) offset)))
+
+(defun treesit-fold-range-editorconfig-end-section (node)
+  "Return the section NODE's end point."
+  (let ((pt (treesit-node-end node))
+        (children (reverse (treesit-node-children node))))
+    (cl-some (lambda (child)
+               (when (equal 'pair (treesit-node-type child))
+                 (setq pt (treesit-node-end child))))
+             children)
+    pt))
+
+(defun treesit-fold-range-editorconfig-section (node offset)
+  "Return the fold range for `section' NODE in EditorConfig.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (when-let* ((end-bracket (car (treesit-fold-find-children node "]")))
+              (beg (treesit-node-end end-bracket))
+              (end (1- (treesit-fold-range-editorconfig-end-section node))))
     (treesit-fold--cons-add (cons beg end) offset)))
 
 (defun treesit-fold-range-elisp-function (node offset)

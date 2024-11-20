@@ -59,7 +59,7 @@ This happens only when summary length is larger than variable
 (define-obsolete-variable-alias
   'treesit-fold-summary-exceeded-string
   'truncate-string-ellipsis
-  "treesit-fold 0.4.0"
+  "treesit-fold 0.2.0"
   "Use built-in variable instead.")
 
 ;;
@@ -224,6 +224,7 @@ type of content by checking the word boundary's existence."
     (csharp-mode            . treesit-fold-summary-csharp)
     (css-mode               . treesit-fold-summary-javadoc)
     (dart-mode              . treesit-fold-summary-javadoc)
+    (editorconfig-conf-mode . treesit-fold-summary-ruby-doc)
     (emacs-lisp-mode        . treesit-fold-summary-elisp)
     (elixir-mode            . treesit-fold-summary-ruby-doc)
     (erlang-mode            . treesit-fold-summary-tex-doc)
