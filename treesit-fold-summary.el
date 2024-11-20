@@ -224,6 +224,7 @@ type of content by checking the word boundary's existence."
     (csharp-mode            . treesit-fold-summary-csharp)
     (css-mode               . treesit-fold-summary-javadoc)
     (dart-mode              . treesit-fold-summary-javadoc)
+    (editorconfig-conf-mode . treesit-fold-summary-ruby-doc)
     (emacs-lisp-mode        . treesit-fold-summary-elisp)
     (elixir-mode            . treesit-fold-summary-ruby-doc)
     (erlang-mode            . treesit-fold-summary-tex-doc)
