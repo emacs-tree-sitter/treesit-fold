@@ -59,7 +59,7 @@ This happens only when summary length is larger than variable
 (define-obsolete-variable-alias
   'treesit-fold-summary-exceeded-string
   'truncate-string-ellipsis
-  "treesit-fold 0.4.0"
+  "treesit-fold 0.2.0"
   "Use built-in variable instead.")
 
 ;;
