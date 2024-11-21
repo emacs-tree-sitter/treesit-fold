@@ -46,23 +46,6 @@
   :group 'treesit-fold)
 
 ;;
-;; (@* "Obsolete" )
-;;
-
-(defcustom treesit-fold-summary-exceeded-string "..."
-  "String that added after display summary.
-This happens only when summary length is larger than variable
-`treesit-fold-summary-max-length'."
-  :type 'string
-  :group 'treesit-fold)
-
-(define-obsolete-variable-alias
-  'treesit-fold-summary-exceeded-string
-  'truncate-string-ellipsis
-  "treesit-fold 0.2.0"
-  "Use built-in variable instead.")
-
-;;
 ;; (@* "Externals" )
 ;;
 
