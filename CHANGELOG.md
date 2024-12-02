@@ -9,6 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 * feat: Add `HEEx` support (#19)
 * feat: Add `EditorConfig` support (#20)
+* feat: Add `Janet` support (#21)
 
 ## 0.1.0
 > Released Jun 22, 2024

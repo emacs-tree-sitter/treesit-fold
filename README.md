@@ -20,33 +20,33 @@ the tree-sitter syntax tree.
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
-- [💾 Installation](#💾-installation)
-  - [🔍 Method 1. with `straight.el` and `use-package`:](#🔍-method-1-with-straightel-and-use-package)
-  - [🔍 Method 2. Manual](#🔍-method-2-manual)
-- [🖥 Usage](#🖥-usage)
-  - [📇 Commands](#📇-commands)
-  - [🔨 Supported languages](#🔨-supported-languages)
-    - [🚀 Add support for non-ts modes](#🚀-Add-support-for-non-ts-modes)
-- [📝 Customization](#📝-customization)
-  - [⚪ Folding on new nodes](#⚪-folding-on-new-nodes)
-    - [❔ Example](#❔-example)
+- [💾 Installation](#-installation)
+  - [🔍 Method 1. with `straight.el` and `use-package`:](#-method-1-with-straightel-and-use-package)
+  - [🔍 Method 2. Manual](#-method-2-manual)
+- [🖥 Usage](#-usage)
+  - [📇 Commands](#-commands)
+  - [🔨 Supported languages](#-supported-languages)
+    - [🚀 Add support for non-ts modes](#-add-support-for-non-ts-modes)
+- [📝 Customization](#-customization)
+  - [⚪ Folding on new nodes](#-folding-on-new-nodes)
+    - [❔ Example](#-example)
     - [↔ Offset](#-offset)
-  - [🔍 Writing new fold functions](#🔍-writing-new-fold-functions)
-- [🔌 Plugins](#🔌-plugins)
-  - [⚖ Indicators Mode](#⚖-indicators-mode)
-    - [💾 Installation](#💾-installation-1)
-    - [🖥 Usage](#🖥-usage-1)
-  - [📝 Summary](#📝-summary)
-    - [🖥 Usage](#🖥-usage-2)
-    - [📝 Customization](#📝-customization-1)
-  - [🌫 Line-Comment folding](#🌫-line-comment-folding)
-    - [🖥 Usage](#🖥-usage-3)
-- [🔰 Contribute](#🔰-contribute)
-  - [🔬 Development](#🔬-development)
-  - [❓ How to add a folding parser?](#❓-how-to-add-a-folding-parser)
-    - [🔍 Where can I look for tree-sitter node?](#🔍-where-can-i-look-for-tree-sitter-node)
-  - [❓ How to create a summary parser?](#❓-how-to-create-a-summary-parser)
-- [⚜️ License](#⚜️-license)
+  - [🔍 Writing new fold functions](#-writing-new-fold-functions)
+- [🔌 Plugins](#-plugins)
+  - [⚖ Indicators Mode](#-indicators-mode)
+    - [💾 Installation](#-installation-1)
+    - [🖥 Usage](#-usage-1)
+  - [📝 Summary](#-summary)
+    - [🖥 Usage](#-usage-2)
+    - [📝 Customization](#-customization-1)
+  - [🌫 Line-Comment folding](#-line-comment-folding)
+    - [🖥 Usage](#-usage-3)
+- [🔰 Contribute](#-contribute)
+  - [🔬 Development](#-development)
+  - [❓ How to add a folding parser?](#-how-to-add-a-folding-parser)
+    - [🔍 Where can I look for tree-sitter node?](#-where-can-i-look-for-tree-sitter-node)
+  - [❓ How to create a summary parser?](#-how-to-create-a-summary-parser)
+- [⚜️ License](#-license)
 
 <!-- markdown-toc end -->
 
@@ -122,7 +122,7 @@ These languages are fairly complete:
 - Fish
 - GDScript / Gleam / GLSL / Go / Groovy (Jenkinsfile)
 - Haskell / Haxe / HEEx / HLSL / HTML
-- Jai / Java / JavaScript / JSX / JSON / Jsonnet / Julia
+- Jai / Janet / Java / JavaScript / JSX / JSON / Jsonnet / Julia
 - Kotlin
 - LaTex / Lisp / Lua
 - Make / MATLAB / Markdown / Mermaid

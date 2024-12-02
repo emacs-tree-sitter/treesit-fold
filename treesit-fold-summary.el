@@ -223,6 +223,7 @@ type of content by checking the word boundary's existence."
     (hlsl-mode              . treesit-fold-summary-c)
     (html-mode              . treesit-fold-summary-xml)
     (jai-mode               . treesit-fold-summary-c)
+    (janet-mode             . treesit-fold-summary-ruby-doc)
     (java-mode              . treesit-fold-summary-javadoc)
     (javascript-mode        . treesit-fold-summary-javadoc)
     (js-mode                . treesit-fold-summary-javadoc)
