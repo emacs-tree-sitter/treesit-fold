@@ -348,6 +348,14 @@
     (block_comment    . treesit-fold-range-block-comment)
     (inline_comment   . treesit-fold-range-c-like-comment)))
 
+(defun treesit-fold-parsers-janet ()
+  "Rule set for Janet."
+  '((par_tup_lit . treesit-fold-range-seq)
+    (sqr_tup_lit . treesit-fold-range-seq)
+    (comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "#")))))
+
 (defun treesit-fold-parsers-java ()
   "Rule set for Java."
   '((switch_block                    . treesit-fold-range-seq)
