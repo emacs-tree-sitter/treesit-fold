@@ -777,8 +777,8 @@ more information."
 
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
-  (when-let* ((param-node (car (treesit-fold-find-children node "vec_lit")))
-              (next-node (treesit-node-next-sibling param-node))
+  (when-let* ((name-node (nth 1 (treesit-fold-find-children node "sym_lit")))
+              (next-node (treesit-node-next-sibling name-node))
               (beg (treesit-node-start next-node))
               (end (1- (treesit-node-end node))))
     (unless treesit-fold-on-next-line  ; display nicely

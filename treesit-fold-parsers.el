@@ -181,7 +181,9 @@
     (str_lit  . treesit-fold-range-seq)
     (comment
      . (lambda (node offset)
-         (treesit-fold-range-line-comment node offset ";;")))))
+         (treesit-fold-range-line-comment node
+                                          (treesit-fold--cons-add offset '(0 . -1))
+                                          ";;")))))
 
 (defun treesit-fold-parsers-cmake ()
   "Rule set for CMake."
