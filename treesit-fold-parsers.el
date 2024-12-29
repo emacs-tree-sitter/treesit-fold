@@ -669,14 +669,12 @@
 
 (defun treesit-fold-parsers-swift ()
   "Rule set for Swift."
-  '((switch_statement      . treesit-fold-range-seq)
-    (function_declaration  . treesit-fold-range-seq)
-    (enum_declaration      . treesit-fold-range-seq)
-    (struct_declaration    . treesit-fold-range-seq)
-    (class_declaration     . treesit-fold-range-seq)
-    (protocol_declaration  . treesit-fold-range-seq)
-    (extension_declaration . treesit-fold-range-seq)
-    (comment               . treesit-fold-range-c-like-comment)))
+  '((function_body     . treesit-fold-range-seq)
+    (class_body        . treesit-fold-range-seq)
+    (enum_class_body   . treesit-fold-range-seq)
+    (protocol_body     . treesit-fold-range-seq)
+    (multiline_comment . treesit-fold-range-c-like-comment)
+    (comment           . treesit-fold-range-c-like-comment)))
 
 (defun treesit-fold-parsers-tablegen ()
   "Rule set for Tablegen."
