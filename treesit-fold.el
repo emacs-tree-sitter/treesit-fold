@@ -796,11 +796,11 @@ more information."
   "Return the section NODE's end point."
   (let ((pt (treesit-node-end node))
         (children (reverse (treesit-node-children node))))
-    (cl-some (lambda (child)
-               (when (equal 'pair (treesit-node-type child))
-                 (setq pt (treesit-node-end child))))
-             children)
-    pt))
+    (or (cl-some (lambda (child)
+                   (when (equal 'pair (treesit-node-type child))
+                     (treesit-node-end child)))
+                 children)
+        pt)))
 
 (defun treesit-fold-range-editorconfig-section (node offset)
   "Return the fold range for `section' NODE in EditorConfig.
