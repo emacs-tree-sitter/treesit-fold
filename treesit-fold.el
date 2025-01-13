@@ -37,6 +37,7 @@
 
 ;;; Code:
 
+(require 'mule-util)
 (require 'seq)
 (require 'subr-x)
 
@@ -227,11 +228,6 @@ For example, Lua, Ruby, etc."
   :type 'boolean
   :group 'treesit-fold)
 
-(defcustom treesit-fold-replacement "..."
-  "Show this string instead of the folded text."
-  :type 'string
-  :group 'treesit-fold)
-
 (defcustom treesit-fold-priority 30
   "Fold range overlay's priority."
   :type 'integer
@@ -409,7 +405,7 @@ This function is borrowed from `tree-sitter-node-at-point'."
       (overlay-put ov 'display
                    (propertize (or (and treesit-fold-summary-show
                                         (treesit-fold-summary--get (buffer-substring beg end)))
-                                   treesit-fold-replacement)
+                                   (truncate-string-ellipsis))
                                'mouse-face 'treesit-fold-replacement-mouse-face
                                'help-echo "mouse-1: unfold this node"
                                'keymap map))
@@ -443,7 +439,7 @@ This function is borrowed from `tree-sitter-node-at-point'."
     (overlay-put ov 'invisible 'treesit-fold)
     (overlay-put ov 'display (or (and treesit-fold-summary-show
                                       (treesit-fold-summary--get (buffer-substring beg end)))
-                                 treesit-fold-replacement))
+                                 (truncate-string-ellipsis)))
     (overlay-put ov 'face 'treesit-fold-replacement-face))
   (treesit-fold-indicators-refresh))
 
@@ -800,11 +796,11 @@ more information."
   "Return the section NODE's end point."
   (let ((pt (treesit-node-end node))
         (children (reverse (treesit-node-children node))))
-    (cl-some (lambda (child)
-               (when (equal 'pair (treesit-node-type child))
-                 (setq pt (treesit-node-end child))))
-             children)
-    pt))
+    (or (cl-some (lambda (child)
+                   (when (equal 'pair (treesit-node-type child))
+                     (treesit-node-end child)))
+                 children)
+        pt)))
 
 (defun treesit-fold-range-editorconfig-section (node offset)
   "Return the fold range for `section' NODE in EditorConfig.
