@@ -303,7 +303,7 @@ For example, Lua, Ruby, etc."
   "Folding code using tree sitter."
   :group 'treesit-fold
   :init-value nil
-  :lighter "Treesit-Fold"
+  :lighter " Treesit-Fold"
   :keymap treesit-fold-mode-map
   (cond
    ((not (and (treesit-available-p)
