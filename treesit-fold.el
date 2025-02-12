@@ -249,10 +249,6 @@ For example, Lua, Ruby, etc."
   "Face used to display fringe contents."
   :group 'treesit-fold)
 
-(defcustom treesit-fold-modes '(prog-mode conf-mode python-ts-mode)
-  "Modes in which `treesit-fold-mode' gets enabled."
-  :type '(repeat symbol))
-
 (defvar-keymap treesit-fold-mode-map
   :doc "Keymap used when `treesit-fold-mode' is active.")
 ;;
