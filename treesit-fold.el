@@ -7,6 +7,7 @@
 
 ;; Author: Junyi Hou <junyi.yi.hou@gmail.com>
 ;;         Shen, Jen-Chieh <jcs090218@gmail.com>
+;; Maintainer: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-tree-sitter/treesit-fold
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "29.1"))
