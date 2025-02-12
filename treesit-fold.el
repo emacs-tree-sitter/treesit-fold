@@ -249,8 +249,21 @@ For example, Lua, Ruby, etc."
   "Face used to display fringe contents."
   :group 'treesit-fold)
 
-(defvar-keymap treesit-fold-mode-map
-  :doc "Keymap used when `treesit-fold-mode' is active.")
+(defcustom treesit-fold-line-count-show nil
+  "Show the number of lines in folded text."
+  :type 'boolean
+  :group 'treesit-fold)
+
+(defcustom treesit-fold-line-count-format
+  (concat (truncate-string-ellipsis)
+          " %d "
+          (truncate-string-ellipsis))
+  "Format string for displaying line count in folded text.
+
+The %d will be replaced with the number of lines in the folded region."
+  :type 'string
+  :group 'treesit-fold)
+
 ;;
 ;; (@* "Externals" )
 ;;
@@ -263,6 +276,9 @@ For example, Lua, Ruby, etc."
 ;;
 ;; (@* "Entry" )
 ;;
+
+(defvar-keymap treesit-fold-mode-map
+  :doc "Keymap used when `treesit-fold-mode' is active.")
 
 (defun treesit-fold--enable ()
   "Start folding minor mode."
@@ -388,6 +404,22 @@ This function is borrowed from `tree-sitter-node-at-point'."
 ;; (@* "Overlays" )
 ;;
 
+(defun treesit-fold--format-overlay-text (beg end)
+  "Return the text to display in the overlay for the fold from BEG to END."
+  (let ((summary (and treesit-fold-summary-show
+                      (treesit-fold-summary--get (buffer-substring beg end)))))
+    (cond
+     ;; Handle line count display.
+     ((when-let*
+          ((line-count (and treesit-fold-line-count-show
+                            (count-lines beg end)))
+           (line-count-str (format treesit-fold-line-count-format line-count)))
+        (concat (or summary "") line-count-str)))
+     ;; `summary' handles truncation itself; just return it if not nil.
+     (summary )
+     ;; Fallback to ellipsis.
+     (t (truncate-string-ellipsis)))))
+
 (defun treesit-fold--create-overlay (range)
   "Create invisible overlay in RANGE."
   (when range
@@ -400,9 +432,7 @@ This function is borrowed from `tree-sitter-node-at-point'."
       (overlay-put ov 'priority treesit-fold-priority)
       (overlay-put ov 'invisible 'treesit-fold)
       (overlay-put ov 'display
-                   (propertize (or (and treesit-fold-summary-show
-                                        (treesit-fold-summary--get (buffer-substring beg end)))
-                                   (truncate-string-ellipsis))
+                   (propertize (treesit-fold--format-overlay-text beg end)
                                'mouse-face 'treesit-fold-replacement-mouse-face
                                'help-echo "mouse-1: unfold this node"
                                'keymap map))
@@ -434,9 +464,11 @@ This function is borrowed from `tree-sitter-node-at-point'."
   (let ((beg (overlay-start ov))
         (end (overlay-end ov)))
     (overlay-put ov 'invisible 'treesit-fold)
-    (overlay-put ov 'display (or (and treesit-fold-summary-show
-                                      (treesit-fold-summary--get (buffer-substring beg end)))
-                                 (truncate-string-ellipsis)))
+    (overlay-put ov 'display
+                 (propertize (treesit-fold--format-overlay-text beg end)
+                             'mouse-face 'treesit-fold-replacement-mouse-face
+                             'help-echo "mouse-1: unfold this node"
+                             'keymap (overlay-get ov 'keymap)))
     (overlay-put ov 'face 'treesit-fold-replacement-face))
   (treesit-fold-indicators-refresh))
 
