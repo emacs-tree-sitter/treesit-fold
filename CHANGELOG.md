@@ -4,8 +4,14 @@ All notable changes to this project will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## 0.2.0 (Unreleased)
+
+## 0.3.0 (Unreleased)
 > Released N/A
+
+* N/A
+
+## 0.2.0
+> Released Feb 12, 2025
 
 * feat: Add `HEEx` support (#19)
 * feat: Add `EditorConfig` support (#20)
