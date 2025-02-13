@@ -1,5 +1,5 @@
 (package "treesit-fold"
-         "0.1.0"
+         "0.2.0"
          "Code folding using treesit")
 
 (website-url "https://github.com/emacs-tree-sitter/treesit-fold")

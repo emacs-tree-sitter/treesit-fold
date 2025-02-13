@@ -9,7 +9,7 @@
 ;;         Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Maintainer: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-tree-sitter/treesit-fold
-;; Version: 0.1.0
+;; Version: 0.2.0
 ;; Package-Requires: ((emacs "29.1"))
 ;; Keywords: convenience folding tree-sitter
 
@@ -504,14 +504,14 @@ current `major-mode'.
 If no NODE is found in point, do nothing."
   (interactive)
   (treesit-fold--ensure-ts
-   (when-let* ((node (or node (treesit-fold--foldable-node-at-pos))))
-     ;; make sure I do not create multiple overlays for the same fold
-     (when-let* ((ov (treesit-fold-overlay-at node)))
-       (delete-overlay ov))
-     (when-let* ((range (treesit-fold--get-fold-range node))
-                 (ov (treesit-fold--create-overlay range)))
-       (run-hooks 'treesit-fold-on-fold-hook)
-       ov))))
+    (when-let* ((node (or node (treesit-fold--foldable-node-at-pos))))
+      ;; make sure I do not create multiple overlays for the same fold
+      (when-let* ((ov (treesit-fold-overlay-at node)))
+        (delete-overlay ov))
+      (when-let* ((range (treesit-fold--get-fold-range node))
+                  (ov (treesit-fold--create-overlay range)))
+        (run-hooks 'treesit-fold-on-fold-hook)
+        ov))))
 
 ;;;###autoload
 (defun treesit-fold-open ()
@@ -519,58 +519,58 @@ If no NODE is found in point, do nothing."
 If the current node is not folded or not foldable, do nothing."
   (interactive)
   (treesit-fold--ensure-ts
-   (when-let* ((node (treesit-fold--foldable-node-at-pos))
-               (ov (treesit-fold-overlay-at node)))
-     (delete-overlay ov)
-     (run-hooks 'treesit-fold-on-fold-hook)
-     t)))
+    (when-let* ((node (treesit-fold--foldable-node-at-pos))
+                (ov (treesit-fold-overlay-at node)))
+      (delete-overlay ov)
+      (run-hooks 'treesit-fold-on-fold-hook)
+      t)))
 
 ;;;###autoload
 (defun treesit-fold-open-recursively ()
   "Open recursively folded syntax NODE that are contained in the node at point."
   (interactive)
   (treesit-fold--ensure-ts
-   (when-let* ((node (treesit-fold--foldable-node-at-pos))
-               (beg (treesit-node-start node))
-               (end (treesit-node-end node))
-               (nodes (treesit-fold--overlays-in 'invisible 'treesit-fold beg end)))
-     (mapc #'delete-overlay nodes)
-     (run-hooks 'treesit-fold-on-fold-hook)
-     t)))
+    (when-let* ((node (treesit-fold--foldable-node-at-pos))
+                (beg (treesit-node-start node))
+                (end (treesit-node-end node))
+                (nodes (treesit-fold--overlays-in 'invisible 'treesit-fold beg end)))
+      (mapc #'delete-overlay nodes)
+      (run-hooks 'treesit-fold-on-fold-hook)
+      t)))
 
 ;;;###autoload
 (defun treesit-fold-close-all ()
   "Fold all foldable syntax nodes in the buffer."
   (interactive)
   (treesit-fold--ensure-ts
-   (let (nodes)
-     (let* ((treesit-fold-indicators-mode)
-            (treesit-fold-on-fold-hook)
-            (node (treesit-buffer-root-node))
-            (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
-                                  (alist-get major-mode treesit-fold-range-alist)))
-            (query (treesit-query-compile (treesit-node-language node) patterns)))
-       (setq nodes (treesit-query-capture node query)
-             nodes (cl-remove-if (lambda (node)
-                                   ;; Removed if on same line
-                                   (treesit-fold--node-range-on-same-line (cdr node)))
-                                 nodes))
-       (thread-last nodes
-                    (mapcar #'cdr)
-                    (mapc #'treesit-fold-close)))
-     (when nodes
-       (run-hooks 'treesit-fold-on-fold-hook)
-       t))))
+    (let (nodes)
+      (let* ((treesit-fold-indicators-mode)
+             (treesit-fold-on-fold-hook)
+             (node (treesit-buffer-root-node))
+             (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
+                                   (alist-get major-mode treesit-fold-range-alist)))
+             (query (treesit-query-compile (treesit-node-language node) patterns)))
+        (setq nodes (treesit-query-capture node query)
+              nodes (cl-remove-if (lambda (node)
+                                    ;; Removed if on same line
+                                    (treesit-fold--node-range-on-same-line (cdr node)))
+                                  nodes))
+        (thread-last nodes
+                     (mapcar #'cdr)
+                     (mapc #'treesit-fold-close)))
+      (when nodes
+        (run-hooks 'treesit-fold-on-fold-hook)
+        t))))
 
 ;;;###autoload
 (defun treesit-fold-open-all ()
   "Unfold all syntax nodes in the buffer."
   (interactive)
   (treesit-fold--ensure-ts
-   (when-let* ((nodes (treesit-fold--overlays-in 'invisible 'treesit-fold)))
-     (mapc #'delete-overlay nodes)
-     (run-hooks 'treesit-fold-on-fold-hook)
-     t)))
+    (when-let* ((nodes (treesit-fold--overlays-in 'invisible 'treesit-fold)))
+      (mapc #'delete-overlay nodes)
+      (run-hooks 'treesit-fold-on-fold-hook)
+      t)))
 
 ;;;###autoload
 (defun treesit-fold-toggle ()
@@ -578,13 +578,13 @@ If the current node is not folded or not foldable, do nothing."
 If the current syntax node is not foldable, do nothing."
   (interactive)
   (treesit-fold--ensure-ts
-   (if-let* ((node (treesit-fold--foldable-node-at-pos (point)))
-             (ov (treesit-fold-overlay-at node)))
-       (progn
-         (delete-overlay ov)
-         (run-hooks 'treesit-fold-on-fold-hook)
-         t)
-     (treesit-fold-close))))
+    (if-let* ((node (treesit-fold--foldable-node-at-pos (point)))
+              (ov (treesit-fold-overlay-at node)))
+        (progn
+          (delete-overlay ov)
+          (run-hooks 'treesit-fold-on-fold-hook)
+          t)
+      (treesit-fold-close))))
 
 (defun treesit-fold--after-command (&rest _)
   "Function call after interactive commands."
