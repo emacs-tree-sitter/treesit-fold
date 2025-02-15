@@ -588,7 +588,9 @@ If the current syntax node is not foldable, do nothing."
 
 (defun treesit-fold--after-command (&rest _)
   "Function call after interactive commands."
-  (treesit-fold-indicators-refresh))
+  (when (and (boundp 'treesit-fold-indicators-mode)
+             treesit-fold-indicators-mode)
+    (treesit-fold-indicators-refresh)))
 
 (let ((commands '(treesit-fold-close
                   treesit-fold-open
