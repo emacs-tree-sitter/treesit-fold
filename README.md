@@ -1,4 +1,5 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![NonGNU ELPA](https://elpa.nongnu.org/nongnu/treesit-fold.svg)](https://elpa.nongnu.org/nongnu/treesit-fold.html)
 [![JCS-ELPA](https://raw.githubusercontent.com/jcs-emacs/badges/master/elpa/v/treesit-fold.svg)](https://jcs-emacs.github.io/jcs-elpa/#/treesit-fold)
 
 # treesit-fold
