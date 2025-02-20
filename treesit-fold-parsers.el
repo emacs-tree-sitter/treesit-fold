@@ -581,7 +581,10 @@
 
 (defun treesit-fold-parsers-python ()
   "Rule set for Python."
-  '((function_definition      . treesit-fold-range-python-def)
+  '((import_statement         . treesit-fold-range-seq)
+    (import_from_statement    . treesit-fold-range-seq)
+    (future_import_statement  . treesit-fold-range-seq)
+    (function_definition      . treesit-fold-range-python-def)
     (class_definition         . treesit-fold-range-python-def)
     (list                     . treesit-fold-range-seq)
     (dictionary               . treesit-fold-range-seq)
@@ -589,10 +592,7 @@
     (expression_statement     . treesit-fold-range-python-expression-statement)
     (comment
      . (lambda (node offset)
-         (treesit-fold-range-line-comment node offset "#")))
-    (import_statement         . treesit-fold-range-seq)
-    (import_from_statement    . treesit-fold-range-seq)
-    (future_import_statement  . treesit-fold-range-seq)))
+         (treesit-fold-range-line-comment node offset "#")))))
 
 (defun treesit-fold-parsers-qss ()
   "Rule set for QSS."
