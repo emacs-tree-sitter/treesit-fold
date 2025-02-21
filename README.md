@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+>
+> This package is code folding support for [treesit.el][] (**since Emacs 29.1**).
+> 
+> For built-in [tree-sitter.el][] (**support Emacs 26.1+**), please use [ts-fold][] instead.
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![NonGNU ELPA](https://elpa.nongnu.org/nongnu/treesit-fold.svg)](https://elpa.nongnu.org/nongnu/treesit-fold.html)
 [![JCS-ELPA](https://raw.githubusercontent.com/jcs-emacs/badges/master/elpa/v/treesit-fold.svg)](https://jcs-emacs.github.io/jcs-elpa/#/treesit-fold)
@@ -735,3 +741,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 See [`LICENSE`](./LICENSE.txt) for details.
+
+
+<!-- Links -->
+
+[ts-fold]: https://github.com/emacs-tree-sitter/ts-fold
+[treesit-fold]: https://github.com/emacs-tree-sitter/treesit-fold
+
+[tree-sitter.el]: https://github.com/emacs-tree-sitter/elisp-tree-sitter
+[treesit.el]: https://www.gnu.org/software/emacs/manual/html_node/elisp/Language-Grammar.html
