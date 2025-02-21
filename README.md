@@ -1,8 +1,8 @@
 > [!IMPORTANT]
 >
-> This package is code folding support for [treesit.el][] (**since Emacs 29.1**).
+> This package is code folding support for built-in [treesit.el][] (**since Emacs 29.1**).
 > 
-> For built-in [tree-sitter.el][] (**support Emacs 26.1+**), please use [ts-fold][] instead.
+> For external [tree-sitter.el][] (**support Emacs 26.1+**), please use [ts-fold][] instead.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![NonGNU ELPA](https://elpa.nongnu.org/nongnu/treesit-fold.svg)](https://elpa.nongnu.org/nongnu/treesit-fold.html)
