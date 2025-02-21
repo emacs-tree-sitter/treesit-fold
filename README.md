@@ -18,7 +18,7 @@
 the tree-sitter syntax tree.
 
 <p align="center">
-<img src="./etc/screenshot.png" width="80%" height="80%"/>
+<img src="./etc/screenshot.png" width="60%"/>
 </p>
 
 <!-- Markdown is not able to render links with unicode so after refreshing the toc, select it and:
