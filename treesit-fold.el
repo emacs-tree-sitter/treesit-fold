@@ -273,6 +273,11 @@ The %d will be replaced with the number of lines in the folded region."
 (declare-function treesit-fold-indicators-mode "treesit-fold-indicators.el")
 (declare-function treesit-fold-indicators-refresh "treesit-fold-indicators.el")
 
+(defun treesit-fold--indicators-refresh ()
+  "Safe version of the `treesit-fold-indicators-refresh' function."
+  (when (bound-and-true-p treesit-fold-indicators-mode)
+    (treesit-fold-indicators-refresh)))
+
 ;;
 ;; (@* "Entry" )
 ;;
@@ -344,8 +349,7 @@ The %d will be replaced with the number of lines in the folded region."
   "Enable line comment folding."
   :group 'treesit-fold
   :init-value nil
-  (when (bound-and-true-p treesit-fold-indicators-mode)
-    (treesit-fold-indicators-refresh)))
+  (treesit-fold--indicators-refresh))
 
 ;;
 ;; (@* "Core" )
@@ -457,7 +461,7 @@ This function is borrowed from `tree-sitter-node-at-point'."
   (overlay-put ov 'invisible nil)
   (overlay-put ov 'display nil)
   (overlay-put ov 'face nil)
-  (treesit-fold-indicators-refresh))
+  (treesit-fold--indicators-refresh))
 
 (defun treesit-fold--hide-ov (ov &rest _)
   "Hide the OV."
@@ -470,7 +474,7 @@ This function is borrowed from `tree-sitter-node-at-point'."
                              'help-echo "mouse-1: unfold this node"
                              'keymap (overlay-get ov 'keymap)))
     (overlay-put ov 'face 'treesit-fold-replacement-face))
-  (treesit-fold-indicators-refresh))
+  (treesit-fold--indicators-refresh))
 
 (defun treesit-fold-overlay-at (node)
   "Return the treesit-fold overlay at NODE if NODE is foldable and folded.
@@ -588,9 +592,7 @@ If the current syntax node is not foldable, do nothing."
 
 (defun treesit-fold--after-command (&rest _)
   "Function call after interactive commands."
-  (when (and (boundp 'treesit-fold-indicators-mode)
-             treesit-fold-indicators-mode)
-    (treesit-fold-indicators-refresh)))
+  (treesit-fold--indicators-refresh))
 
 (let ((commands '(treesit-fold-close
                   treesit-fold-open
