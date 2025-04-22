@@ -1,3 +1,5 @@
+;; -*- mode: eask; lexical-binding: t -*-
+
 (package "treesit-fold"
          "0.2.1"
          "Code folding using treesit")
