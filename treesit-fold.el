@@ -1407,9 +1407,8 @@ more information."
   (when-let* ((colon-node (car (treesit-fold-find-children node ":")))
               (beg (treesit-node-start colon-node)))
     (let ((current-node (treesit-node-next-sibling colon-node))
-          (last-body-node nil)
-          (end nil))
-
+          (last-body-node)
+          (end))
       ;; Iterate through siblings until we hit an elif or else clause
       (while (and current-node
                   (not (member (treesit-node-type current-node)
