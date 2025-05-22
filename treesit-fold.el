@@ -1399,6 +1399,34 @@ more information."
           (t
            (treesit-fold-range-c-like-comment node offset)))))
 
+(defun treesit-fold-range-python-block (node offset)
+  "Define fold range for `if_statement' and other blocks.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (when-let* ((colon-node (car (treesit-fold-find-children node ":")))
+              (beg (treesit-node-start colon-node)))
+    (let ((current-node (treesit-node-next-sibling colon-node))
+          (last-body-node)
+          (end))
+      ;; Iterate through siblings until we hit an elif or else clause
+      (while (and current-node
+                  (not (member (treesit-node-type current-node)
+                               '("elif_clause" "else_clause" "except_clause"))))
+
+        ;; Only consider non-comment nodes as body nodes
+        (unless (string-match-p "comment" (treesit-node-type current-node))
+          (setq last-body-node current-node))
+        (setq current-node (treesit-node-next-sibling current-node)))
+
+      ;; Set end position based on the last body node or fallback to node end
+      (setq end (if last-body-node
+                    (treesit-node-end last-body-node)
+                  (treesit-node-end node)))
+
+      ;; Return the range and offset to fold
+      (treesit-fold--cons-add (cons (+ beg 1) end) offset))))
+
 (defun treesit-fold-range-python-def (node offset)
   "Define fold range for `function_definition' and `class_definition'.
 

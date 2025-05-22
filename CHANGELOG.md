@@ -8,7 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.3.0 (Unreleased)
 > Released N/A
 
-* N/A
+* feat(parsers): Improve folding of block nodes in python (#32)
 
 ## 0.2.0
 > Released Feb 12, 2025
