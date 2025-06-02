@@ -9,6 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 > Released N/A
 
 * feat(parsers): Improve folding of block nodes in python (#32)
+* feat: Add basic `Magik` support (76bba5243883f6c8bff51c744c31e287a045a9f5)
 
 ## 0.2.0
 > Released Feb 12, 2025
