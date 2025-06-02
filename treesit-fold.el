@@ -140,6 +140,8 @@
     (llvm-mir-mode          . ,(treesit-fold-parsers-llvm-mir))
     (lua-mode               . ,(treesit-fold-parsers-lua))
     (lua-ts-mode            . ,(treesit-fold-parsers-lua))
+    (magik-mode             . ,(treesit-fold-parsers-magik))
+    (magik-ts-mode          . ,(treesit-fold-parsers-magik))
     (makefile-mode          . ,(treesit-fold-parsers-make))
     (makefile-ts-mode       . ,(treesit-fold-parsers-make))
     (makefile-automake-mode . ,(treesit-fold-parsers-make))

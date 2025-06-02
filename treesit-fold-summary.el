@@ -241,6 +241,7 @@ type of content by checking the word boundary's existence."
     (llvm-mode              . treesit-fold-summary-elisp)
     (llvm-mir-mode          . treesit-fold-summary-elisp)
     (lua-mode               . treesit-fold-summary-lua-doc)
+    (magik-mode             . treesit-fold-summary-ruby-doc)
     (makefile-mode          . treesit-fold-summary-ruby-doc)
     (makefile-automake-mode . treesit-fold-summary-ruby-doc)
     (makefile-gmake-mode    . treesit-fold-summary-ruby-doc)

@@ -472,6 +472,13 @@
     (repeat_statement     . treesit-fold-range-lua-repeat)
     (comment              . treesit-fold-range-lua-comment)))
 
+(defun treesit-fold-parsers-magik ()
+  "Rule set for Magik."
+  '((method . treesit-fold-range-seq)
+    (comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "#")))))
+
 (defun treesit-fold-parsers-make ()
   "Rule set for Make."
   '((recipe . treesit-fold-range-make-recipe)
