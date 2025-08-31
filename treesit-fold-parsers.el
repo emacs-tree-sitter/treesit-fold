@@ -312,6 +312,11 @@
     (interface_type         . (lambda (node offset)
                                 (treesit-fold-range-markers node offset "{" "}")))))
 
+(defun treesit-fold-parsers-graphql ()
+  "Rule set for GraphQL."
+  '((fields_definition . treesit-fold-range-seq)
+    (list_type         . treesit-fold-range-seq)))
+
 (defun treesit-fold-parsers-groovy ()
   "Rule set for Groovy."
   '((block         . treesit-fold-range-groovy-block)

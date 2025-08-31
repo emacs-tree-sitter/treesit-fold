@@ -103,6 +103,7 @@
     (go-mode                . ,(treesit-fold-parsers-go))
     (go-ts-mode             . ,(treesit-fold-parsers-go))
     (go-mod-ts-mode         . ,(treesit-fold-parsers-go))
+    (graphql-mode           . ,(treesit-fold-parsers-graphql))
     (groovy-mode            . ,(treesit-fold-parsers-groovy))
     (jenkinsfile-mode       . ,(treesit-fold-parsers-groovy))
     (haskell-mode           . ,(treesit-fold-parsers-haskell))
