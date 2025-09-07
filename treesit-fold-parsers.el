@@ -750,6 +750,22 @@
   '((comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))
+    (block_sequence_item
+     . (lambda (node offset)
+         (let* ((key (treesit-search-subtree
+                      node
+                      (lambda (node)
+                        (string= "key" (treesit-node-field-name node)))))
+                (value (treesit-search-subtree
+                        node
+                        (lambda (node)
+                          (string= "value" (treesit-node-field-name node)))))
+                (beg (treesit-node-end
+                      (if (string= "block_node" (treesit-node-type value))
+                          key
+                        value)))
+                (end (treesit-node-end node)))
+           (treesit-fold--cons-add (cons beg end) offset))))
     (block_mapping_pair
      . ((lambda (node offset)
           (treesit-fold-range-markers node offset ":"))
