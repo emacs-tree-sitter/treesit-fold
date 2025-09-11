@@ -216,6 +216,7 @@ type of content by checking the word boundary's existence."
     (gdscript-mode          . treesit-fold-summary-ruby-doc)
     (glsl-mode              . treesit-fold-summary-c)
     (go-mode                . treesit-fold-summary-go)
+    (graphql-mode           . treesit-fold-summary-ruby-doc)
     (groovy-mode            . treesit-fold-summary-javadoc)
     (jenkinsfile-mode       . treesit-fold-summary-javadoc)
     (haskell-mode           . treesit-fold-summary-lua-doc)

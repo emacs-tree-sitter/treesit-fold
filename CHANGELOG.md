@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 * feat(parsers): Improve folding of block nodes in python ([#32](../../pull/32))
 * feat: Add basic `Magik` support ([`76bba52`](../../commit/76bba5243883f6c8bff51c744c31e287a045a9f5))
+* feat: Add `GraphQL` support ([`c85762f`](../../commit/c85762f4585e93e5e372b39355d357261431e983))
 * Enable folding for sequence items ([#35](../../pull/35))
 
 ## 0.2.0
