@@ -191,7 +191,7 @@
     (tuareg-mode            . ,(treesit-fold-parsers-ocaml))
     (typescript-mode        . ,(treesit-fold-parsers-typescript))
     (typescript-ts-mode     . ,(treesit-fold-parsers-typescript))
-    (tsx-ts-mode            . ,(treesit-fold-parsers-typescript))
+    (tsx-ts-mode            . ,(treesit-fold-parsers-tsx))
     (verilog-mode           . ,(treesit-fold-parsers-verilog))
     (verilog-ts-mode        . ,(treesit-fold-parsers-verilog))
     (vhdl-mode              . ,(treesit-fold-parsers-vhdl))

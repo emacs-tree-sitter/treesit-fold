@@ -726,6 +726,12 @@
      (named_imports . treesit-fold-range-seq)
      (object_type   . treesit-fold-range-seq))))
 
+(defun treesit-fold-parsers-tsx ()
+  "Rule set for TSX files (TypeScript with JSX)."
+  (append
+   (treesit-fold-parsers-typescript)
+   '((jsx_element   . treesit-fold-range-html))))
+
 (defun treesit-fold-parsers-verilog ()
   "Rule set for Verilog."
   '((module_declaration       . treesit-fold-range-verilog-module)
