@@ -263,6 +263,7 @@ type of content by checking the word boundary's existence."
     (python-mode            . treesit-fold-summary-python-doc)
     (qss-mode               . treesit-fold-summary-css)
     (rjsx-mode              . treesit-fold-summary-javadoc)
+    (ron-mode               . treesit-fold-summary-rust-doc)
     (rst-mode               . treesit-fold-summary-rst-doc)
     (ruby-mode              . treesit-fold-summary-ruby-doc)
     (rust-mode              . treesit-fold-summary-rust-doc)

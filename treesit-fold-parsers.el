@@ -626,6 +626,18 @@
   "Rule set for R."
   '((brace_list . treesit-fold-range-seq)))
 
+(defun treesit-fold-parsers-ron ()
+  "Rule set for RON."
+  '((array  . treesit-fold-range-seq)
+    (map    . treesit-fold-range-seq)
+    (struct . treesit-fold-range-seq)
+    (line_comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node
+                                          (treesit-fold--cons-add offset '(0 . -1))
+                                          "///")))
+    (block_comment . treesit-fold-range-block-comment)))
+
 (defun treesit-fold-parsers-rst ()
   "Rule set for reStructuredText."
   '((body    . treesit-fold-range-rst-body)
