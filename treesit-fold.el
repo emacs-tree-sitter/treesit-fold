@@ -1456,6 +1456,16 @@ more information."
               (end (treesit-node-end node)))
     (treesit-fold--cons-add (cons (+ beg 3) (- end 3)) offset)))
 
+(defun treesit-fold-range-ron-struct (node offset)
+  "Define fold range for `struct' in RON.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (when-let* ((node-bracket (car (treesit-fold-find-children node "(")))
+              (beg (treesit-node-end node-bracket))
+              (end (1- (treesit-node-end node))))
+    (treesit-fold--cons-add (cons beg end) offset)))
+
 (defun treesit-fold-range-rst-body (node offset)
   "Define fold range for `body' in reStructuredText.
 
