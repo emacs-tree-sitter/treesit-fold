@@ -723,8 +723,9 @@
 
 (defun treesit-fold-parsers-toml ()
   "Rule set for TOML."
-  '((table . treesit-fold-range-toml-table)
-    (array . treesit-fold-range-seq)
+  '((table        . treesit-fold-range-toml-table)
+    (array        . treesit-fold-range-seq)
+    (inline_table . treesit-fold-range-seq)
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))))
