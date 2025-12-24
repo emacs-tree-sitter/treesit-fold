@@ -104,6 +104,7 @@
 (declare-function treesit-fold-range-verilog-initial-construct "treesit-fold.el")
 (declare-function treesit-fold-range-verilog-module "treesit-fold.el")
 (declare-function treesit-fold-range-vhdl-package "treesit-fold.el")
+(declare-function treesit-fold-range-vim-for-loop "treesit-fold.el")
 (declare-function treesit-fold-range-vhdl-type "treesit-fold.el")
 
 ;;
@@ -760,10 +761,18 @@
     (enumeration_type_definition . treesit-fold-range-seq)
     (comment                     . treesit-fold-range-lua-comment)))
 
-(defun treesit-fold-parsers-vimscript ()
-  "Rule set for Vimscript."
-  '((function_definition . treesit-fold-range-vimscript-function)
-    (if_statement        . (treesit-fold-range-seq 1 -4))))
+(defun treesit-fold-parsers-vim ()
+  "Rule set for Vim."
+  '((function_definition . treesit-fold-range-vim-for-loop)
+    (for_loop            . treesit-fold-range-vim-for-loop)
+    (while_loop          . treesit-fold-range-vim-for-loop)
+    (if_statement        . treesit-fold-range-vim-for-loop)
+    (elseif_statement    . treesit-fold-range-vim-for-loop)
+    (else_statement      . treesit-fold-range-vim-for-loop)
+    (list                . treesit-fold-range-seq)
+    (comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "\"")))))
 
 (defun treesit-fold-parsers-xml ()
   "Rule set for XML."

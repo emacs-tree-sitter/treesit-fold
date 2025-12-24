@@ -178,6 +178,10 @@ type of content by checking the word boundary's existence."
   "Extract summary from DOC-STR in Org block."
   (treesit-fold-summary--doc-extract doc-str '()))
 
+(defun treesit-fold-summary-vim (doc-str)
+  "Extract summary from DOC-STR in Vim."
+  (treesit-fold-summary--generic doc-str '("\"")))
+
 (defun treesit-fold-summary-xml (doc-str)
   "Extract summary from DOC-STR in XML."
   (treesit-fold-summary--generic doc-str "-"))
@@ -279,6 +283,7 @@ type of content by checking the word boundary's existence."
     (typescript-mode        . treesit-fold-summary-javadoc)
     (verilog-mode           . treesit-fold-summary-javadoc)
     (vhdl-mode              . treesit-fold-summary-lua-doc)
+    (vimscript-ts-mode      . treesit-fold-summary-vim)
     (nxml-mode              . treesit-fold-summary-xml)
     (yaml-mode              . treesit-fold-summary-ruby-doc)
     (k8s-mode               . treesit-fold-summary-ruby-doc)

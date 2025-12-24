@@ -197,7 +197,7 @@
     (verilog-ts-mode        . ,(treesit-fold-parsers-verilog))
     (vhdl-mode              . ,(treesit-fold-parsers-vhdl))
     (vhdl-ts-mode           . ,(treesit-fold-parsers-vhdl))
-    (vimscript-ts-mode      . ,(treesit-fold-parsers-vimscript))
+    (vimscript-ts-mode      . ,(treesit-fold-parsers-vim))
     (nxml-mode              . ,(treesit-fold-parsers-xml))
     (xml-ts-mode            . ,(treesit-fold-parsers-xml))
     (yaml-mode              . ,(treesit-fold-parsers-yaml))
@@ -1607,17 +1607,16 @@ more information."
       (setq end (treesit-fold--last-eol end)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
-(defun treesit-fold-range-vimscript-function (node offset)
-  "Return the fold range for `function!' and `func' NODE
-in Vimscript.
-
+(defun treesit-fold-range-vim-for-loop (node offset)
+  "Return the fold range for `for_loop' in Vim.
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
-  (when-let* ((param-node (treesit-node-child node 1))
-              (beg (treesit-node-start param-node))
+  (when-let* ((body (car (treesit-fold-find-children node "body")))
+              (prev (treesit-node-prev-sibling body))
+              (beg (treesit-node-end prev))
               (end (treesit-node-end node)))
-    (unless treesit-fold-on-next-line  ; display nicely
-      (setq beg (treesit-fold--last-eol beg)))
+    (when treesit-fold-on-next-line
+      (setq end (treesit-fold--last-eol end)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
 (provide 'treesit-fold)
