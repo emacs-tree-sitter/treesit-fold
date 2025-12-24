@@ -14,6 +14,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 * Enable folding for sequence items ([#35](../../pull/35))
 * feat: Add `RON` support ([#38](../../pull/38))
 * feat: Add `Vimscript` support ([`d57ff35`](../../commit/d57ff357194483f4d3277613345634136a41b509))
+* feat: Add `Nim` support ([`f5f3cd2`](../../commit/f5f3cd2d95b6e122c69f9f70391c35960f3c1f16))
 
 ## 0.2.0
 > Released Feb 12, 2025
