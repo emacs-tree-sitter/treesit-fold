@@ -546,6 +546,14 @@
   '((body    . treesit-fold-range-seq)
     (comment . treesit-fold-range-c-like-comment)))
 
+(defun treesit-fold-parsers-nim ()
+  "Rule set for Nim."
+  '((array_construction . treesit-fold-range-seq)
+    (for                . treesit-fold-range-seq)
+    (comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "#")))))
+
 (defun treesit-fold-parsers-nix ()
   "Rule set for Nix."
   '((attrset_expression . treesit-fold-range-seq)
