@@ -190,6 +190,10 @@ type of content by checking the word boundary's existence."
   "Extract summary from DOC-STR in Julia."
   (treesit-fold-summary--generic doc-str '("#" "\"\"\"")))
 
+(defun treesit-fold-summary-ocaml (doc-str)
+  "Extract summary from DOC-STR in OCaml."
+  (treesit-fold-summary--generic doc-str '("\"\"")))
+
 ;;
 ;; (@* "Core" )
 ;;
@@ -207,6 +211,7 @@ type of content by checking the word boundary's existence."
     (beancount-mode         . treesit-fold-summary-elisp)
     (c-mode                 . treesit-fold-summary-c)
     (c++-mode               . treesit-fold-summary-c)
+    (caml-mode              . treesit-fold-summary-ocaml)
     (cmake-mode             . treesit-fold-summary-ruby-doc)
     (clojure-mode           . treesit-fold-summary-elisp)
     (clojure-ts-mode        . treesit-fold-summary-elisp)
@@ -221,6 +226,7 @@ type of content by checking the word boundary's existence."
     (elixir-mode            . treesit-fold-summary-ruby-doc)
     (erlang-mode            . treesit-fold-summary-tex-doc)
     (fish-mode              . treesit-fold-summary-javadoc)
+    (fsharp-mode            . treesit-fold-summary-ocaml)
     (gdscript-mode          . treesit-fold-summary-ruby-doc)
     (gdscript-ts-mode       . treesit-fold-summary-ruby-doc)
     (glsl-mode              . treesit-fold-summary-c)

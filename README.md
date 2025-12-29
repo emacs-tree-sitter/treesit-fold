@@ -127,7 +127,7 @@ These languages are fairly complete:
 - C / C++ / C# / Clojure / CMake / CSS
 - Dart
 - Elisp / Elixir / Erlang
-- Fish
+- Fish / F#
 - GDScript / Gleam / GLSL / Go / GraphQL / Groovy (Jenkinsfile)
 - Haskell / Haxe / HEEx / HLSL / HTML
 - Jai / Janet / Java / JavaScript / JSX / JSON / Jsonnet / Julia

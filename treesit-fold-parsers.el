@@ -54,6 +54,8 @@
 (declare-function treesit-fold-range-fish-function "treesit-fold.el")
 (declare-function treesit-fold-range-fish-if "treesit-fold.el")
 (declare-function treesit-fold-range-fish-case "treesit-fold.el")
+(declare-function treesit-fold-range-fsharp-module-defn "treesit-fold.el")
+(declare-function treesit-fold-range-fsharp-record-type-defn "treesit-fold.el")
 (declare-function treesit-fold-range-haskell-function "treesit-fold.el")
 (declare-function treesit-fold-range-html "treesit-fold.el")
 (declare-function treesit-fold-range-julia-function "treesit-fold.el")
@@ -275,6 +277,14 @@
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))))
+
+(defun treesit-fold-parsers-fsharp ()
+  "Rules set for F#."
+  '((module_defn      . treesit-fold-range-fsharp-module-defn)
+    (list_expression  . treesit-fold-range-seq)
+    (record_type_defn . treesit-fold-range-fsharp-record-type-defn)
+    (line_comment     . treesit-fold-range-c-like-comment)
+    (block_comment    . (treesit-fold-range-seq 1 -1))))
 
 (defun treesit-fold-parsers-gdscript ()
   "Rule set for GGScript."
