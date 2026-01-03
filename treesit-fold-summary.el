@@ -225,6 +225,8 @@ type of content by checking the word boundary's existence."
     (emacs-lisp-mode        . treesit-fold-summary-elisp)
     (elixir-mode            . treesit-fold-summary-ruby-doc)
     (erlang-mode            . treesit-fold-summary-tex-doc)
+    (fennel-mode            . treesit-fold-summary-elisp)
+    (fennel-ts-mode         . treesit-fold-summary-elisp)
     (fish-mode              . treesit-fold-summary-javadoc)
     (fsharp-mode            . treesit-fold-summary-ocaml)
     (gdscript-mode          . treesit-fold-summary-ruby-doc)
