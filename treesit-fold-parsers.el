@@ -266,6 +266,14 @@
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "%")))))
 
+(defun treesit-fold-parsers-fennel ()
+  "Rules set for Fennel."
+  '((macro_form . treesit-fold-range-elisp-function)
+    (fn_form    . treesit-fold-range-elisp-function)
+    (comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset ";;")))))
+
 (defun treesit-fold-parsers-fish ()
   "Rules set for Fish."
   '((function_definition . treesit-fold-range-fish-function)

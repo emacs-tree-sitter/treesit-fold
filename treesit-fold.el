@@ -95,6 +95,8 @@
     (erlang-mode            . ,(treesit-fold-parsers-erlang))
     (erlang-ts-mode         . ,(treesit-fold-parsers-erlang))
     (ess-r-mode             . ,(treesit-fold-parsers-r))
+    (fennel-mode            . ,(treesit-fold-parsers-fennel))
+    (fennel-ts-mode         . ,(treesit-fold-parsers-fennel))
     (fish-mode              . ,(treesit-fold-parsers-fish))
     (fsharp-mode            . ,(treesit-fold-parsers-fsharp))
     (fsharp-ts-mode         . ,(treesit-fold-parsers-fsharp))
