@@ -102,6 +102,7 @@
     (fsharp-ts-mode         . ,(treesit-fold-parsers-fsharp))
     (gdscript-mode          . ,(treesit-fold-parsers-gdscript))
     (gdscript-ts-mode       . ,(treesit-fold-parsers-gdscript))
+    (gitconfig-mode         . ,(treesit-fold-parsers-git-config))
     (gleam-ts-mode          . ,(treesit-fold-parsers-gleam))
     (glsl-mode              . ,(treesit-fold-parsers-glsl))
     (go-mode                . ,(treesit-fold-parsers-go))
@@ -964,6 +965,18 @@ more information."
   (when-let* ((beg (car (treesit-fold-find-children node "{")))
               (beg (treesit-node-end beg))
               (end (1- (treesit-node-end node))))
+    (treesit-fold--cons-add (cons beg end) offset)))
+
+(defun treesit-fold-range-git-config-section (node offset)
+  "Return the fold range for `section' in YAML.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (when-let* ((first (car (treesit-fold-find-children node "section_header")))
+              (beg (treesit-node-end first))
+              (end (treesit-node-end node)))
+    (when treesit-fold-on-next-line
+      (setq end (treesit-fold--last-eol end)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
 (defun treesit-fold-range-gleam (node offset)

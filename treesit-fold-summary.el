@@ -230,6 +230,7 @@ type of content by checking the word boundary's existence."
     (fish-mode              . treesit-fold-summary-javadoc)
     (fsharp-mode            . treesit-fold-summary-ocaml)
     (gdscript-mode          . treesit-fold-summary-ruby-doc)
+    (gitconfig-mode         . treesit-fold-summary-ruby-doc)
     (gdscript-ts-mode       . treesit-fold-summary-ruby-doc)
     (glsl-mode              . treesit-fold-summary-c)
     (go-mode                . treesit-fold-summary-go)
