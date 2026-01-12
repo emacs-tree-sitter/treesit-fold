@@ -108,8 +108,8 @@
 (declare-function treesit-fold-range-verilog-module "treesit-fold.el")
 (declare-function treesit-fold-range-vhdl-package "treesit-fold.el")
 (declare-function treesit-fold-range-vim-for-loop "treesit-fold.el")
-(declare-function treesit-fold-range-wat-module "ts-fold.el")
-(declare-function treesit-fold-range-wat-func "ts-fold.el")
+(declare-function treesit-fold-range-wat-module "treesit-fold.el")
+(declare-function treesit-fold-range-wat-func "treesit-fold.el")
 (declare-function treesit-fold-range-vhdl-type "treesit-fold.el")
 
 ;;
