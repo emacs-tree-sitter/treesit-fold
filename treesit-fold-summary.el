@@ -322,6 +322,8 @@ type of content by checking the word boundary's existence."
     (vhdl-ts-mode           . treesit-fold-summary-lua-doc)
     (vimrc-mode             . treesit-fold-summary-vim)
     (vimscript-ts-mode      . treesit-fold-summary-vim)
+    (wat-mode               . treesit-fold-summary-elisp)
+    (wat-ts-mode            . treesit-fold-summary-elisp)
     (nxml-mode              . treesit-fold-summary-xml)
     (yaml-mode              . treesit-fold-summary-ruby-doc)
     (yaml-ts-mode           . treesit-fold-summary-ruby-doc)
