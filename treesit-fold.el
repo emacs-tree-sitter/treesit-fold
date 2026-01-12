@@ -208,6 +208,8 @@
     (vimscript-ts-mode      . ,(treesit-fold-parsers-vim))
     (wat-mode               . ,(treesit-fold-parsers-wat))
     (wat-ts-mode            . ,(treesit-fold-parsers-wat))
+    (wgsl-mode              . ,(treesit-fold-parsers-wgsl))
+    (wgsl-ts-mode           . ,(treesit-fold-parsers-wgsl))
     (nxml-mode              . ,(treesit-fold-parsers-xml))
     (xml-ts-mode            . ,(treesit-fold-parsers-xml))
     (yaml-mode              . ,(treesit-fold-parsers-yaml))

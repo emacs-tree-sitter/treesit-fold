@@ -819,6 +819,13 @@
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset ";;")))))
 
+(defun treesit-fold-parsers-wgsl ()
+  "Rule set for WGSL."
+  '((compound_statement . treesit-fold-range-seq)
+    (struct_declaration . treesit-fold-range-groovy-block)
+    (line_comment       . treesit-fold-range-c-like-comment)
+    (block_comment      . treesit-fold-range-c-like-comment)))
+
 (defun treesit-fold-parsers-xml ()
   "Rule set for XML."
   '((element . treesit-fold-range-html)
