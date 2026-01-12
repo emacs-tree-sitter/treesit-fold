@@ -208,6 +208,8 @@
     (vimscript-ts-mode      . ,(treesit-fold-parsers-vim))
     (wat-mode               . ,(treesit-fold-parsers-wat))
     (wat-ts-mode            . ,(treesit-fold-parsers-wat))
+    (wgsl-mode              . ,(treesit-fold-parsers-wgsl))
+    (wgsl-ts-mode           . ,(treesit-fold-parsers-wgsl))
     (nxml-mode              . ,(treesit-fold-parsers-xml))
     (xml-ts-mode            . ,(treesit-fold-parsers-xml))
     (yaml-mode              . ,(treesit-fold-parsers-yaml))
@@ -1666,7 +1668,7 @@ more information."
 
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
-  (when-let* ((param-node (tsc-get-nth-child node 1))
+  (when-let* ((param-node (treesit-node-child node 1))
               (beg (treesit-node-end param-node))
               (end (1- (treesit-node-end node))))
     (treesit-fold--cons-add (cons beg end) offset)))
@@ -1677,8 +1679,8 @@ more information."
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
   (when-let* ((body (car (treesit-fold-find-children node "result")))
-              (next (tsc-get-next-sibling body))
-              (beg (tsc-node-start-position next))
+              (next (treesit-node-next-sibling body))
+              (beg (treesit-node-start next))
               (end (1- (treesit-node-end node))))
     (treesit-fold--cons-add (cons beg end) offset)))
 
