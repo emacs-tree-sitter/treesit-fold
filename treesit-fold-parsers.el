@@ -354,6 +354,7 @@
 (defun treesit-fold-parsers-haskell ()
   "Rule set for Haskell."
   '((function . treesit-fold-range-haskell-function)
+    (bind     . treesit-fold-range-haskell-function)
     (comment  . treesit-fold-range-lua-comment)))
 
 (defun treesit-fold-parsers-haxe ()
