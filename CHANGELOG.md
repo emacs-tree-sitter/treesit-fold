@@ -18,6 +18,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 * feat: Add `F#` support ([`35b6201`](../../commit/35b62011cb8ae2f85adb00080a0a9e040eee5c87))
 * feat: Add `Fennel` support ([#39](../../pull/39))
 * feat: Add `Git config` support ([#40](../../pull/40))
+* feat: Add `Wasm Text` support ([#42](../../pull/42))
 
 ## 0.2.0
 > Released Feb 12, 2025

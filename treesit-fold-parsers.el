@@ -108,6 +108,8 @@
 (declare-function treesit-fold-range-verilog-module "treesit-fold.el")
 (declare-function treesit-fold-range-vhdl-package "treesit-fold.el")
 (declare-function treesit-fold-range-vim-for-loop "treesit-fold.el")
+(declare-function treesit-fold-range-wat-module "treesit-fold.el")
+(declare-function treesit-fold-range-wat-func "treesit-fold.el")
 (declare-function treesit-fold-range-vhdl-type "treesit-fold.el")
 
 ;;
@@ -808,6 +810,14 @@
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "\"")))))
+
+(defun treesit-fold-parsers-wat ()
+  "Rule set for Wasm text format."
+  '((module            . treesit-fold-range-wat-module)
+    (module_field_func . treesit-fold-range-wat-func)
+    (line_comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset ";;")))))
 
 (defun treesit-fold-parsers-xml ()
   "Rule set for XML."
