@@ -298,11 +298,17 @@
     (block_comment    . (treesit-fold-range-seq 1 -1))))
 
 (defun treesit-fold-parsers-gdscript ()
-  "Rule set for GGScript."
+  "Rule set for GDScript."
   '((body . (treesit-fold-range-seq -1 1))
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))))
+
+(defun treesit-fold-parsers-gdshader ()
+  "Rule set for GDShader."
+  '((compound_statement . treesit-fold-range-seq)
+    (struct_fields      . treesit-fold-range-seq)
+    (comment            . treesit-fold-range-c-like-comment)))
 
 (defun treesit-fold-parsers-git-config ()
   "Rule set for Git config."

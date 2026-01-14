@@ -102,6 +102,8 @@
     (fsharp-ts-mode         . ,(treesit-fold-parsers-fsharp))
     (gdscript-mode          . ,(treesit-fold-parsers-gdscript))
     (gdscript-ts-mode       . ,(treesit-fold-parsers-gdscript))
+    (gdshader-mode          . ,(treesit-fold-parsers-gdshader))
+    (gdshader-ts-mode       . ,(treesit-fold-parsers-gdshader))
     (gitconfig-mode         . ,(treesit-fold-parsers-git-config))
     (gleam-ts-mode          . ,(treesit-fold-parsers-gleam))
     (glsl-mode              . ,(treesit-fold-parsers-glsl))
