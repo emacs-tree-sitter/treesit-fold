@@ -794,7 +794,8 @@
    '((class_body    . treesit-fold-range-seq)
      (enum_body     . treesit-fold-range-seq)
      (named_imports . treesit-fold-range-seq)
-     (object_type   . treesit-fold-range-seq))))
+     (object_type   . treesit-fold-range-seq)
+     (interface_body . treesit-fold-range-seq))))
 
 (defun treesit-fold-parsers-tsx ()
   "Rule set for TSX files (TypeScript with JSX)."
