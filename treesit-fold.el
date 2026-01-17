@@ -1040,8 +1040,10 @@ more information."
 
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
-  (let* ((beg (treesit-node-end (treesit-node-child node 0)))
-         (end-node (treesit-fold-last-child node))
+  (let* (;; beg = after element name that follows open angle bracket
+         (beg (treesit-node-end (treesit-node-child (treesit-node-child node 0) 1)))
+         ;; end-node is the closing angle bracket
+         (end-node (treesit-node-child (treesit-fold-last-child node) 2))
          (end (treesit-node-start end-node)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
