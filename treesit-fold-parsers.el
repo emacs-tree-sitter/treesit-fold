@@ -91,6 +91,7 @@
 (declare-function treesit-fold-range-org-body "treesit-fold.el")
 (declare-function treesit-fold-range-clojure-function "treesit-fold.el")
 (declare-function treesit-fold-range-cmake-body "treesit-fold.el")
+(declare-function treesit-fold-range-crystal-block "treesit-fold.el")
 (declare-function treesit-fold-range-editorconfig-section "treesit-fold.el")
 (declare-function treesit-fold-range-pascal-comment "treesit-fold.el")
 (declare-function treesit-fold-range-python-block "treesit-fold.el")
@@ -198,6 +199,17 @@
   "Rule set for CMake."
   '((body . treesit-fold-range-cmake-body)
     (line_comment
+     . (lambda (node offset)
+         (treesit-fold-range-line-comment node offset "#")))))
+
+(defun treesit-fold-parsers-crystal ()
+  "Rule set for Crystal."
+  '((block      . treesit-fold-range-crystal-block)
+    (method_def . treesit-fold-range-crystal-block)
+    (while      . treesit-fold-range-crystal-block)
+    (call       . treesit-fold-range-crystal-block)
+    (until      . treesit-fold-range-crystal-block)
+    (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))))
 
