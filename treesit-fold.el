@@ -83,6 +83,8 @@
     (cmake-ts-mode          . ,(treesit-fold-parsers-cmake))
     (clojure-mode           . ,(treesit-fold-parsers-clojure))
     (clojure-ts-mode        . ,(treesit-fold-parsers-clojure))
+    (crystal-mode           . ,(treesit-fold-parsers-crystal))
+    (crystal-ts-mode        . ,(treesit-fold-parsers-crystal))
     (csharp-mode            . ,(treesit-fold-parsers-csharp))
     (csharp-ts-mode         . ,(treesit-fold-parsers-csharp))
     (css-mode               . ,(treesit-fold-parsers-css))
@@ -838,6 +840,19 @@ For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
   (when-let* ((beg (treesit-node-start node))
               (end (treesit-node-end node)))
+    (when treesit-fold-on-next-line  ; display nicely
+      (setq end (treesit-fold--last-eol end)))
+    (treesit-fold--cons-add (cons beg end) offset)))
+
+(defun treesit-fold-range-crystal-block (node offset)
+  "Return the fold range for `block' NODE in Crystal.
+
+For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
+more information."
+  (when-let* ((expr (car (treesit-fold-find-children node "expressions")))
+              (prev (treesit-node-prev-sibling expr))
+              (beg (treesit-node-end prev))
+              (end (treesit-node-end expr)))
     (when treesit-fold-on-next-line  ; display nicely
       (setq end (treesit-fold--last-eol end)))
     (treesit-fold--cons-add (cons beg end) offset)))

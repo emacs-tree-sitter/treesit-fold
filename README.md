@@ -124,7 +124,7 @@ These languages are fairly complete:
 
 - ActionScript / Arduino / Assembly
 - Bash / Beancount
-- C / C++ / C# / Clojure / CMake / CSS
+- C / C++ / C# / Clojure / CMake / Crystal / CSS
 - Dart
 - Elisp / Elixir / Erlang
 - F# / Fish / Fennel

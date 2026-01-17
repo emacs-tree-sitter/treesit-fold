@@ -215,6 +215,8 @@ type of content by checking the word boundary's existence."
     (cmake-mode             . treesit-fold-summary-ruby-doc)
     (clojure-mode           . treesit-fold-summary-elisp)
     (clojure-ts-mode        . treesit-fold-summary-elisp)
+    (crystal-mode           . treesit-fold-summary-ruby-doc)
+    (crystal-ts-mode        . treesit-fold-summary-ruby-doc)
     (csharp-mode            . treesit-fold-summary-csharp)
     (csharp-ts-mode         . treesit-fold-summary-csharp)
     (css-mode               . treesit-fold-summary-javadoc)

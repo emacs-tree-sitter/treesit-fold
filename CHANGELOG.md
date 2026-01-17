@@ -21,6 +21,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 * feat: Add `Wasm Text` support ([#42](../../pull/42))
 * feat: Add `WGSL` support ([#43](../../pull/43))
 * feat: Add `GDShader` support ([#44](../../pull/44))
+* feat: Add `Crystal` support ([#45](../../pull/45))
 
 ## 0.2.0
 > Released Feb 12, 2025
