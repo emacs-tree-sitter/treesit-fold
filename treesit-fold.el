@@ -514,7 +514,9 @@ Return nil otherwise."
   "Run BODY only if `tree-sitter-mode` is enabled."
   (declare (indent 0))
   `(if (treesit-fold-ready-p)
-       (progn ,@body)
+       (save-excursion
+         (back-to-indentation)
+         (progn ,@body))
      (user-error "Ignored, no tree-sitter parser in current buffer")))
 
 ;;;###autoload
@@ -537,53 +539,75 @@ If no NODE is found in point, do nothing."
         ov))))
 
 ;;;###autoload
-(defun treesit-fold-open ()
+(defun treesit-fold-open (&optional node)
   "Open the fold of the syntax node in which `point' resides.
 If the current node is not folded or not foldable, do nothing."
   (interactive)
   (treesit-fold--ensure-ts
-    (when-let* ((node (treesit-fold--foldable-node-at-pos))
+    (when-let* ((node (or node (treesit-fold--foldable-node-at-pos)))
                 (ov (treesit-fold-overlay-at node)))
       (delete-overlay ov)
       (run-hooks 'treesit-fold-on-fold-hook)
       t)))
 
+(defun treesit-fold--node-nodes (parent &optional children-only)
+  "Return nodes from PARENT. If CHILDREN-ONLY then omit PARENT."
+  (when parent
+    (let* ((patterns (seq-mapcat
+                      (lambda (fold-range) `((,(car fold-range)) @name))
+                      (alist-get major-mode treesit-fold-range-alist)))
+           (query (treesit-query-compile
+                   (treesit-node-language parent) patterns))
+           (nodes
+            (cl-remove-if
+             (lambda (node)
+               ;; Remove Parent if `children-only' or if on same line.
+               (or (treesit-fold--node-range-on-same-line (cdr node))
+                   (when children-only (equal parent (cdr node)))))
+             (treesit-query-capture parent query))))
+      nodes)))
+
 ;;;###autoload
-(defun treesit-fold-open-recursively ()
-  "Open recursively folded syntax NODE that are contained in the node at point."
-  (interactive)
+(defun treesit-fold-open-recursively (&optional parent-only node)
+  "Open recursively folded syntax nodes that are contained in the node
+at point. If PARENT-ONLY then keep children closed."
+  (interactive "P")
   (treesit-fold--ensure-ts
-    (when-let* ((node (treesit-fold--foldable-node-at-pos))
-                (beg (treesit-node-start node))
-                (end (treesit-node-end node))
-                (nodes (treesit-fold--overlays-in 'invisible 'treesit-fold beg end)))
-      (mapc #'delete-overlay nodes)
-      (run-hooks 'treesit-fold-on-fold-hook)
-      t)))
+    (if-let* ((node (or node (treesit-fold--foldable-node-at-pos)))
+              (child (not parent-only))
+              (nodes (treesit-fold--node-nodes node nil)))
+        (progn
+          (thread-last nodes
+                       (mapcar #'cdr)
+                       (mapc #'treesit-fold-open))
+          (run-hooks 'treesit-fold-on-fold-hook))
+      (funcall-interactively #'treesit-fold-open node))))
+
+;;;###autoload
+(defun treesit-fold-close-recursively (&optional children-only node)
+  "Close recursively folded syntax nodes that are contained in the
+node at point. If CHILDREN-ONLY then keep Parent open"
+  (interactive "P")
+  (treesit-fold--ensure-ts
+    (let (nodes)
+      (if-let* ((node (or node (treesit-fold--foldable-node-at-pos)))
+                (nodes (treesit-fold--node-nodes node children-only)))
+          (thread-last nodes
+                       (mapcar #'cdr)
+                       (mapc #'treesit-fold-close))
+        (run-hooks 'treesit-fold-on-fold-hook)))))
 
 ;;;###autoload
 (defun treesit-fold-close-all ()
   "Fold all foldable syntax nodes in the buffer."
   (interactive)
   (treesit-fold--ensure-ts
-    (let (nodes)
-      (let* ((treesit-fold-indicators-mode)
-             (treesit-fold-on-fold-hook)
-             (node (treesit-buffer-root-node))
-             (patterns (seq-mapcat (lambda (fold-range) `((,(car fold-range)) @name))
-                                   (alist-get major-mode treesit-fold-range-alist)))
-             (query (treesit-query-compile (treesit-node-language node) patterns)))
-        (setq nodes (treesit-query-capture node query)
-              nodes (cl-remove-if (lambda (node)
-                                    ;; Removed if on same line
-                                    (treesit-fold--node-range-on-same-line (cdr node)))
-                                  nodes))
-        (thread-last nodes
-                     (mapcar #'cdr)
-                     (mapc #'treesit-fold-close)))
-      (when nodes
-        (run-hooks 'treesit-fold-on-fold-hook)
-        t))))
+    (when-let* ((node (treesit-buffer-root-node))
+                (nodes (treesit-fold--node-nodes node nil)))
+      (thread-last nodes
+                   (mapcar #'cdr)
+                   (mapc #'treesit-fold-close))
+      (run-hooks 'treesit-fold-on-fold-hook))))
 
 ;;;###autoload
 (defun treesit-fold-open-all ()
@@ -608,6 +632,81 @@ If the current syntax node is not foldable, do nothing."
           (run-hooks 'treesit-fold-on-fold-hook)
           t)
       (treesit-fold-close))))
+
+(defun treesit-fold--node-cycle-state (&optional node)
+  "Return the cycle state of current heading.
+Return either hide-all, headings-only, or show-all."
+  (let (nodes)
+    (let* ((treesit-fold-indicators-mode)
+           (treesit-fold-on-fold-hook)
+           (node (or node (treesit-fold--foldable-node-at-pos)))
+           (children (treesit-node-children node))
+           (child (nth 0 children))
+           (beg (treesit-fold--get-fold-range node))
+           (nodes (treesit-fold--overlays-in
+                   'invisible
+                   'treesit-fold (treesit-node-start child) (treesit-node-end node)))
+           (first (cl-find-if (lambda (ov)
+                                (equal (overlay-start ov) (car beg)))
+                              nodes)))
+      (cond ((null nodes) 'show-all)
+            (first  'hide-all)
+            (t 'headings-only)))))
+
+(defun treesit-fold-node-cycle (&optional node)
+  "Cycle visibility state of the current node.
+
+This cycles the visibility of the current node and children between
+`hide all', `headings only' and `show all'.
+
+`Hide all' means hide everything in parent node.
+`Headings only' means show child nodes, but not their bodies.
+`Show all' means show all the child nodes and their bodies.
+
+If non-nil, EVENT should be a mouse event."
+  (interactive)
+  (let* ((node (or node (treesit-fold--foldable-node-at-pos))))
+    (when node
+      (pcase (treesit-fold--node-cycle-state node)
+        ('hide-all
+         (treesit-fold-open-recursively t node)
+         (if (treesit-fold--node-nodes node t)
+             (message "Only headings")
+           (message "Show all")))
+        ('headings-only
+         (treesit-fold-open-recursively nil node)
+         (message "Show all"))
+        ('show-all
+         (treesit-fold-close-recursively nil node)
+         (message "Hide all"))))))
+
+(defun treesit-fold-buffer-cycle ()
+  "Cycle visibility state of the buffer.
+
+This cycles the visibility of the all nodes and children between
+`hide all', `headings only' and `show all'.
+
+`Hide all' means hide everything in parent node.
+`Headings only' means show child nodes, but not their bodies.
+`Show all' means show all the child nodes and their bodies.
+
+If non-nil, EVENT should be a mouse event."
+  (interactive)
+  (let* ((children (treesit-node-children (treesit-buffer-root-node)))
+         (state (seq-map #'treesit-fold--node-cycle-state children)))
+    (pcase state
+      ((pred (member 'hide-all))
+       (seq-map (lambda (n)
+                  (treesit-fold-open-recursively t n))
+                children))
+      ((pred (member 'headings-only))
+       (seq-map (lambda (n)
+                  (treesit-fold-open-recursively nil n))
+                children))
+      ((pred (member 'show-all))
+       (seq-map (lambda (n)
+                  (treesit-fold-close-recursively nil n))
+                children)))))
 
 (defun treesit-fold--after-command (&rest _)
   "Function call after interactive commands."
