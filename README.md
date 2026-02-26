@@ -158,6 +158,14 @@ These languages are in development:
 *P.S. We don't list trivial languages here. e.g., LLVM IR (`.ll`) files, etc.
 Please see the variable `treesit-fold-range-alist` for the fully supported list!*
 
+#### ↓ Adding support for derived modes
+You can add support for derived modes where the parent mode has existing support.
+For example, a new mode which derives from YAML would be added to the support list like this:
+
+```elisp
+(push `(<your-major>-mode . ,(treesit-fold-parsers-yaml)) treesit-fold-range-alist)
+```
+
 #### 🚀 Add support for non-ts modes
 You can add folding support for non-ts modes (such as c-mode or emacs-lisp-mode),
 this requires you have the parser library for the mode.
