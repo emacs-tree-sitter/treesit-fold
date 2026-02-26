@@ -158,31 +158,6 @@ These languages are in development:
 *P.S. We don't list trivial languages here. e.g., LLVM IR (`.ll`) files, etc.
 Please see the variable `treesit-fold-range-alist` for the fully supported list!*
 
-#### ↓ Adding support for derived modes
-You can add support for derived modes where the parent mode has existing support.
-For example, a new mode which derives from YAML would be added to the support list like this:
-
-```elisp
-(push `(<your-major>-mode . ,(treesit-fold-parsers-yaml)) treesit-fold-range-alist)
-```
-
-#### 🚀 Add support for non-ts modes
-You can add folding support for non-ts modes (such as c-mode or emacs-lisp-mode),
-this requires you have the parser library for the mode.
-After, you can enable folding adding these code snippets to your configuration:
-
-``` elisp
-;; For `treesit-parser-create' you need to ensure the language fits with
-;; the parser library (e.g `libtree-sitter-cpp.dll' is 'cpp).
-
-(add-hook 'emacs-lisp-mode-hook (lambda () (treesit-parser-create 'elisp)))
-
-;; For use-package users
-(use-package treesit-fold
-  :hook (c-mode . (lambda () (treesit-parser-create 'c)))
-  ...)
-```
-
 ## 📝 Customization
 
 Although treesit-fold aims to have good folding out of the box for all supported
@@ -632,6 +607,35 @@ This plugin makes line comment into foldable range.
   ```
   M-x treesit-fold-line-comment-mode
   ```
+
+## ❓ FAQ
+
+#### 💫 Adding support for derived modes
+
+You can add support for derived modes where the parent mode has existing support.
+For example, a new mode which derives from YAML would be added to the support list like this:
+
+```elisp
+(push `(<your-major>-mode . ,(treesit-fold-parsers-yaml)) treesit-fold-range-alist)
+```
+
+#### 💫 Add support for non-ts modes
+
+You can add folding support for non-ts modes (such as c-mode or emacs-lisp-mode),
+this requires you have the parser library for the mode.
+After, you can enable folding adding these code snippets to your configuration:
+
+``` elisp
+;; For `treesit-parser-create' you need to ensure the language fits with
+;; the parser library (e.g `libtree-sitter-cpp.dll' is 'cpp).
+
+(add-hook 'emacs-lisp-mode-hook (lambda () (treesit-parser-create 'elisp)))
+
+;; For use-package users
+(use-package treesit-fold
+  :hook (c-mode . (lambda () (treesit-parser-create 'c)))
+  ...)
+```
 
 ## 🔰 Contribute
 
