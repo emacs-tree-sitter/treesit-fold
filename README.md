@@ -27,34 +27,37 @@ the tree-sitter syntax tree.
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
-- [💾 Installation](#-installation)
-  - [🔍 Method 1. with `straight.el` and `use-package`:](#-method-1-with-straightel-and-use-package)
-  - [🔍 Method 2. Manual](#-method-2-manual)
-- [🖥 Usage](#-usage)
-  - [📇 Commands](#-commands)
-  - [🔨 Supported languages](#-supported-languages)
-    - [🚀 Add support for non-ts modes](#-add-support-for-non-ts-modes)
-- [📝 Customization](#-customization)
-  - [⚪ Folding on new nodes](#-folding-on-new-nodes)
-    - [❔ Example](#-example)
-    - [↔ Offset](#-offset)
-  - [🔍 Writing new fold functions](#-writing-new-fold-functions)
-  - [🔢 Line Count Display](#-line-count-display)
-- [🔌 Plugins](#-plugins)
-  - [⚖ Indicators Mode](#-indicators-mode)
-    - [💾 Installation](#-installation-1)
-    - [🖥 Usage](#-usage-1)
-  - [📝 Summary](#-summary)
-    - [🖥 Usage](#-usage-2)
-    - [📝 Customization](#-customization-1)
-  - [🌫 Line-Comment folding](#-line-comment-folding)
-    - [🖥 Usage](#-usage-3)
-- [🔰 Contribute](#-contribute)
-  - [🔬 Development](#-development)
-  - [❓ How to add a folding parser?](#-how-to-add-a-folding-parser)
-    - [🔍 Where can I look for tree-sitter node?](#-where-can-i-look-for-tree-sitter-node)
-  - [❓ How to create a summary parser?](#-how-to-create-a-summary-parser)
-- [⚜️ License](#-license)
+- [treesit-fold](#treesit-fold)
+  - [💾 Installation](#-installation)
+    - [🔍 Method 1. with `straight.el` and `use-package`:](#-method-1-with-straightel-and-use-package)
+    - [🔍 Method 2. Manual](#-method-2-manual)
+  - [🖥 Usage](#-usage)
+    - [📇 Commands](#-commands)
+    - [🔨 Supported languages](#-supported-languages)
+  - [📝 Customization](#-customization)
+    - [⚪ Folding on new nodes](#-folding-on-new-nodes)
+      - [❔ Example](#-example)
+      - [↔ Offset](#-offset)
+    - [🔍 Writing new fold functions](#-writing-new-fold-functions)
+    - [🔢 Line Count Display](#-line-count-display)
+  - [🔌 Plugins](#-plugins)
+    - [⚖ Indicators Mode](#-indicators-mode)
+      - [💾 Installation](#-installation-1)
+      - [🖥 Usage](#-usage-1)
+    - [📝 Summary](#-summary)
+      - [🖥 Usage](#-usage-2)
+      - [📝 Customization](#-customization-1)
+    - [🌫 Line-Comment folding](#-line-comment-folding)
+      - [🖥 Usage](#-usage-3)
+  - [❓ FAQ](#-faq)
+    - [💫 Adding support for derived modes](#-adding-support-for-derived-modes)
+    - [💫 Add support for non-ts modes](#-add-support-for-non-ts-modes)
+  - [🔰 Contribute](#-contribute)
+    - [🔬 Development](#-development)
+    - [❓ How to add a folding parser?](#-how-to-add-a-folding-parser)
+      - [🔍 Where can I look for tree-sitter node?](#-where-can-i-look-for-tree-sitter-node)
+    - [❓ How to create a summary parser?](#-how-to-create-a-summary-parser)
+  - [⚜️ License](#-license)
 
 <!-- markdown-toc end -->
 
@@ -610,7 +613,7 @@ This plugin makes line comment into foldable range.
 
 ## ❓ FAQ
 
-#### 💫 Adding support for derived modes
+### 💫 Adding support for derived modes
 
 You can add support for derived modes where the parent mode has existing support.
 For example, a new mode which derives from YAML would be added to the support list like this:
@@ -619,7 +622,7 @@ For example, a new mode which derives from YAML would be added to the support li
 (push `(<your-major>-mode . ,(treesit-fold-parsers-yaml)) treesit-fold-range-alist)
 ```
 
-#### 💫 Add support for non-ts modes
+### 💫 Add support for non-ts modes
 
 You can add folding support for non-ts modes (such as c-mode or emacs-lisp-mode),
 this requires you have the parser library for the mode.
