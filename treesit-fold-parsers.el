@@ -702,13 +702,15 @@
 
 (defun treesit-fold-parsers-ruby ()
   "Rule set for Ruby."
-  '((class    . treesit-fold-range-ruby-class-def)
-    (method   . treesit-fold-range-ruby-class-def)
-    (array    . treesit-fold-range-seq)
-    (do       . (treesit-fold-range-seq 1 -2))     ; match with `end`
-    (do_block . (treesit-fold-range-seq 1 -2))     ; match with `end`, in spec file
-    (then     . treesit-fold-range-ruby-if)        ; `if` and `elsif` block
-    (else     . (treesit-fold-range-ruby-if 4 0))  ; `else` block
+  '((class            . treesit-fold-range-ruby-class-def)
+    (module           . treesit-fold-range-ruby-class-def)
+    (method           . treesit-fold-range-ruby-class-def)
+    (singleton_method . treesit-fold-range-ruby-class-def)
+    (array            . treesit-fold-range-seq)
+    (do               . (treesit-fold-range-seq 1 -2))     ; match with `end`
+    (do_block         . (treesit-fold-range-seq 1 -2))     ; match with `end`, in spec file
+    (then             . treesit-fold-range-ruby-if)        ; `if` and `elsif` block
+    (else             . (treesit-fold-range-ruby-if 4 0))  ; `else` block
     (comment
      . (lambda (node offset)
          (treesit-fold-range-line-comment node offset "#")))))
