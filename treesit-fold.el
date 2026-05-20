@@ -1275,8 +1275,12 @@ For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
   (when-let* ((text (treesit-node-text node))
               ((string-prefix-p "#" text))
-              (beg  (treesit-node-start node))
-              (end  (treesit-node-end node)))
+              (heading (treesit-node-child node 0))
+              (heading-tail (treesit-fold-last-child heading))
+              (beg (treesit-node-end heading-tail))
+              (end (treesit-node-end node)))
+    (when treesit-fold-on-next-line
+      (setq end (treesit-fold--last-eol end)))
     (treesit-fold--cons-add (cons beg end) offset)))
 
 (defun treesit-fold-range-markdown-code-block (node offset)
