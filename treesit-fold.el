@@ -435,7 +435,11 @@ This function is borrowed from `tree-sitter-node-at-point'."
      ;; Handle line count display.
      ((when-let*
           ((line-count (and treesit-fold-line-count-show
-                            (count-lines beg end)))
+                            (count-lines beg
+                                         (save-excursion
+                                           ;; count-lines expect the end position to be at bol
+                                           (goto-char end)
+                                           (line-beginning-position)))))
            (line-count-str (format treesit-fold-line-count-format line-count)))
         (concat (or summary "") line-count-str)))
      ;; `summary' handles truncation itself; just return it if not nil.
