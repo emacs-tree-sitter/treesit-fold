@@ -97,6 +97,7 @@
     (erlang-mode            . ,(treesit-fold-parsers-erlang))
     (erlang-ts-mode         . ,(treesit-fold-parsers-erlang))
     (ess-r-mode             . ,(treesit-fold-parsers-r))
+    (f90-ts-mode            . ,(treesit-fold-parsers-f90))
     (fennel-mode            . ,(treesit-fold-parsers-fennel))
     (fennel-ts-mode         . ,(treesit-fold-parsers-fennel))
     (fish-mode              . ,(treesit-fold-parsers-fish))
@@ -930,6 +931,172 @@ more information."
 For arguments NODE and OFFSET, see function `treesit-fold-range-seq' for
 more information."
   (treesit-fold-range-erlang-signature node offset "when"))
+
+(defun treesit-fold--f90-block-header-end-types (node types)
+  "Return end position of NODE's header.
+
+Skip an optional leading `block_label_start_expression', then
+consume NODE's direct children (named or anonymous) for as long as
+their type is a member of TYPES.  Return the end position of
+the last such child, or nil if none matched."
+  (let* ((child0 (treesit-node-child node 0))
+         (child (if (string= (treesit-node-type child0) "block_label_start_expression")
+                    (treesit-node-next-sibling child0)
+                  child0)))
+    (cl-loop
+     for node = child then (treesit-node-next-sibling node)
+     while (and node (member (treesit-node-type node) types))
+     maximize (treesit-node-end node))))
+
+(defun treesit-fold--f90-block-header-end-sentinel (node sentinel)
+  "Return the end position of NODE's header line.
+
+Walk NODE's children in order (skipping an optional leading block
+label node), and return the end position of the first child whose type
+equals SENTINEL — the token/node that marks the end of the
+IF/WHERE/FORALL opening line.  These are \"then\" for IF,
+\"parenthesized_expression\" for WHERE (its mask), and \")\" for FORALL
+(closing its control list triple).
+Returns nil if SENTINEL is not found."
+  (cl-loop
+   for child = (treesit-node-child node 0)
+   then (treesit-node-next-sibling child)
+   while child
+   when (string= (treesit-node-type child) sentinel)
+   return (treesit-node-end child)))
+
+(defun treesit-fold--f90-block-inline-range (node offset close-type header-sentinel)
+  "Fold NODE with OFFSET if its last child has type CLOSE-TYPE.
+
+Shared logic for fortran constructs (IF/WHERE/FORALL) whose inline
+and block forms are structurally indistinguishable except for
+whether the last child has the type CLOSE-TYPE (some \"end_*_statement\" node).
+HEADER-SENTINEL is used to determine the end of the header line, whose end
+provides the beginning of the region to fold.
+See `treesit-fold--f90-block-header-end-sentinel'."
+  (when-let* ((close-stmt (treesit-fold-last-child node)))
+    (when (string= (treesit-node-type close-stmt) close-type)
+      (when-let* ((beg-pos (treesit-fold--f90-block-header-end-sentinel node header-sentinel))
+                  (beg (treesit-fold--eol
+                        (save-excursion
+                          (goto-char beg-pos)
+                          (skip-chars-backward " \t\n\r")
+                          (point))))
+                  (end (treesit-fold--last-eol (treesit-node-start close-stmt))))
+        (when (< beg end)
+          (treesit-fold--cons-add (cons beg end) offset))))))
+
+(defun treesit-fold--f90-comment-prefix (node)
+  "Extract the literal comment prefix from a fortran (comment) NODE.
+Common prefixes are \"!\", \"!!$\", \"!>\", or even \"!$omp\".
+The function uses blanks for separating the comment prefix, but removes those
+blanks.  Note that elisp regexp are missing lookahead assertions."
+  (let ((text (treesit-node-text node)))
+    (when (string-match "\\(!\\S-*\\)\\(?:\\s-\\|$\\)" text)
+      (match-string 1 text))))
+
+(defun treesit-fold-range-f90-block-structure (node offset &optional types)
+  "Fold a generic fortran keyword-terminated block NODE with OFFSET.
+
+Covers almost all fortran statements which are structured as:
+
+  <opening-statement>
+    <body...>
+  <end-statement>
+
+For constructs with no optional leading block label and a single
+named header node (e.g. `subroutine_statement', `module_statement'),
+TYPES should be nil. The first named child is used directly to find
+the end of the opening statement.
+
+For constructs that may carry a leading block label and/or whose
+header is spread across several sibling tokens rather than one named
+node (e.g. `block_construct', whose header is represented by an anonymous
+node \"block\"), use TYPES to pass a list of types of child nodes, both named
+and anonymous, that can appear in the header line.
+See `treesit-fold--f90-block-header-end-types'."
+  (when-let* ((beg-pos (if types
+                           (treesit-fold--f90-block-header-end-types node types)
+                         (treesit-node-end (treesit-node-child node 0 t))))
+              (beg (treesit-fold--eol
+                    (save-excursion
+                      (goto-char beg-pos)
+                      (skip-chars-backward " \t\n\r")
+                      (point))))
+              (close-stmt (treesit-fold-last-child node))
+              (end (treesit-fold--last-eol (treesit-node-start close-stmt))))
+    (when (< beg end)
+      (treesit-fold--cons-add (cons beg end) offset))))
+
+(defun treesit-fold-range-f90-do-loop (node offset)
+  "Fold a fortran do construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("do_statement")))
+
+(defun treesit-fold-range-f90-block-construct (node offset)
+  "Fold a fortran block construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("block")))
+
+(defun treesit-fold-range-f90-associate (node offset)
+  "Fold a fortran associate construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("associate" "association_list")))
+
+(defun treesit-fold-range-f90-select-case (node offset)
+  "Fold a fortran select case construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("select" "case" "selectcase" "selector")))
+
+(defun treesit-fold-range-f90-select-type (node offset)
+  "Fold a fortran select type construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("select" "type" "selecttype" "selector")))
+
+(defun treesit-fold-range-f90-select-rank (node offset)
+  "Fold a fortran select rank construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("select" "rank" "selectrank" "selector")))
+
+(defun treesit-fold-range-f90-coarray-critical (node offset)
+  "Fold a fortran coarray critical construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("critical" "argument_list")))
+
+(defun treesit-fold-range-f90-coarray-team (node offset)
+  "Fold a fortran coarray team construct NODE with OFFSET."
+  (treesit-fold-range-f90-block-structure node offset '("change" "team" "argument_list")))
+
+(defun treesit-fold-range-f90-if (node offset)
+  "Fold a fortran IF construct NODE with OFFSET.
+
+Fortran IF comes in two forms:
+  - Block:  IF (cond) THEN ... [ELSE IF ... | ELSE ...] END IF
+  - Inline: IF (cond) action-stmt
+
+Only the block form (last named child `end_if_statement') produces
+a meaningful fold."
+  (treesit-fold--f90-block-inline-range node offset "end_if_statement" "then"))
+
+(defun treesit-fold-range-f90-where (node offset)
+  "Fold a fortran WHERE construct NODE with OFFSET.
+
+Fortran WHERE comes in two forms:
+  - Block:  WHERE (mask) ... [ELSEWHERE ...] END WHERE
+  - Inline: WHERE (mask) assignment-stmt
+
+Only the block form (last named child `end_where_statement') produces
+a meaningful fold."
+  (treesit-fold--f90-block-inline-range node offset "end_where_statement" "parenthesized_expression"))
+
+(defun treesit-fold-range-f90-forall (node offset)
+  "Fold a fortran FORALL construct NODE with OFFSET.
+
+Fortran FORALL comes in two forms:
+  - Block:  FORALL (...) ... END FORALL
+  - Inline: FORALL (...) assignment-stmt
+
+Only the block form (last named child `end_forall_statement') produces
+a meaningful fold."
+  (treesit-fold--f90-block-inline-range node offset "end_forall_statement" ")"))
+
+(defun treesit-fold-range-f90-comment (node offset)
+  "Fold fortran comments starting at NODE with OFFSET."
+  (when-let* ((prefix (treesit-fold--f90-comment-prefix node)))
+    (treesit-fold-range-line-comment node offset prefix)))
 
 (defun treesit-fold-range-fish-function (node offset)
   "Define fold range for `function' in Fish.
